@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/alpha?serverTimezone=Asia/Seoul&characterEncoding=UTF-&useUnicode=true
+    username: root
+    password: ss64267844!@
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: update # create none
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
