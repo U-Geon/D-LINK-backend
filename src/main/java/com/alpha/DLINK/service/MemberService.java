@@ -7,11 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -22,13 +23,20 @@ public class MemberService {
         return member.getId();
     }
 
+    // 회원 조회
+    public List<Member> findAll() {
+        return memberRepository.findAll();
+    }
+
     // 회원 정보 수정
-    public void update(Long id, String name, String password) {
+    public Long update(Long id, String name, String password) {
         Optional<Member> findMember = memberRepository.findById(id);
         if(findMember.isPresent()) {
             Member member = findMember.get();
-
+            member.setName(name);
+            member.setPassword(password);
         }
+        return id;
     }
 
     // 회원 탈퇴

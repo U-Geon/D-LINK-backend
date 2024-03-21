@@ -16,7 +16,6 @@ public class PostService {
 
     // 게시글 생성
     public void create(Post post) {
-
         postRepository.save(post);
     }
 

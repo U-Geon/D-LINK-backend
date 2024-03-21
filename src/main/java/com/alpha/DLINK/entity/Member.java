@@ -3,8 +3,7 @@ package com.alpha.DLINK.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
@@ -23,8 +22,7 @@ public class Member {
     @Column(nullable = false)
     private String name;
 
-    @Email
-    @Column(unique = true)
+    @Column(unique = true, name = "email", nullable = false)
     private String email;
 
     @Column(name = "password")
@@ -34,10 +32,9 @@ public class Member {
     @JsonIgnore
     private List<Post> posts = new ArrayList<>();
 
-    public static void create(String name, String email, String password) {
+    public static Member create(String email) {
         Member member = new Member();
-        member.name = name;
-        member.email = email;
-        member.password = password;
+        member.setEmail(email);
+        return member;
     }
 }
