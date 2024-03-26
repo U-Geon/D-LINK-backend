@@ -71,16 +71,9 @@ mysql:
   password: ss64267844!@
 
 jwt:
-  access:
-    token:
-      expiration:
-        seconds: 3600
-  refresh:
-    token:
-      expiration:
-        seconds: 3600
   token:
-    secret-key: itsepguyitsepguyitsepgyitsitsits
+    secret-key: daunhyeonjinhangyeolsubinseungjoongeon
+    expire: 1
 
 #cloud:
 #  aws:
