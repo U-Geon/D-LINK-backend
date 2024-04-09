@@ -4,7 +4,8 @@ import jakarta.persistence.Embeddable;
 import lombok.*;
 
 @Embeddable
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Nutrition {

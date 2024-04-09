@@ -1,8 +1,7 @@
-package com.alpha.DLINK.domain.member.service;
+package com.alpha.DLINK.domain.member;
 
 
-import com.alpha.DLINK.domain.member.domain.Member;
-import com.alpha.DLINK.domain.member.repository.MemberRepository;
+import com.alpha.DLINK.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,18 +22,23 @@ public class MemberService {
         return member.getId();
     }
 
-    // 회원 조회
+    // 전체 회원 조회
     public List<Member> findAll() {
         return memberRepository.findAll();
     }
 
+    // 특정 회원 조회 (없으면 null)
+    public Member findById(Long id) {
+        Optional<Member> byId = memberRepository.findById(id);
+        return byId.orElse(null);
+    }
+
     // 회원 정보 수정
-    public Long update(Long id, String name, String password) {
+    public Long update(Long id, String name) {
         Optional<Member> findMember = memberRepository.findById(id);
         if(findMember.isPresent()) {
             Member member = findMember.get();
-            member.setName(name);
-            member.setPassword(password);
+            member.setNickname(name);
         }
         return id;
     }

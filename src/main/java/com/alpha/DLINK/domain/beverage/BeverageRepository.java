@@ -1,4 +1,4 @@
-package com.alpha.DLINK.domain.beverage.repository;
+package com.alpha.DLINK.domain.beverage;
 
 import com.alpha.DLINK.domain.beverage.domain.Beverage;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -14,7 +14,7 @@ spring:
             authorization-grant-type: authorization_code
             redirect-uri: ${kakao.redirect-uri}
 #            redirect-uri: "{baseUrl}/login/oauth2/code/kakao" # yml 파일에서 {} 가 spring 특수문자로 인식되게 하기 위해 " " 사용
-            client-authentication-method: client_secret_post # POST x
+            client-authentication-method: client_secret_post # POST 사용 불가 (setRequestEntityConverter를 사용하여 POST를 지원하는 인스턴스를 제공해야 합니다.)
             scope:
               - account_email
         provider:
@@ -23,11 +23,12 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token # "토큰 받기" 항목
             user-info-uri: https://kapi.kakao.com/v2/user/me # "사용자 정보 가져오기" 항목
             user-name-attribute: id # 식별자 . 카카오의 경우 "id" 사용
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/alpha?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&useUnicode=true
     username: root
-    password: ${mysql.password}
+    password: ss64267844!@
   jpa:
     database: mysql
     hibernate:
@@ -65,22 +66,23 @@ kakao:
   client:
     id: bf112ec286fcdd432da901824631453f
     secret: SwsFDoYP84xf3hXOCK8CcusqtB6nzE0p
-  redirect-uri: "http://localhost:8080/login/oauth2/code/kakao"
+  redirect-uri: "http://10.223.117.37:8080/login/oauth2/code/kakao"
 
-mysql:
-  password: ss64267844!@
 
 jwt:
-  token:
-    secret-key: daunhyeonjinhangyeolsubinseungjoongeon
-    expire: 1
+  # 1Dawoon2HyeonJin3HanGyeol4Subin5Seungjoon6Geon를 Base64로 인코딩함.
+  secret-key: MURhd29vbjJIeWVvbkppbjNIYW5HeWVvbDRTdWJpbjVTZXVuZ2pvb242R2Vvbg==
+  access-token:
+    expiration: 43200 # 12시간
+  refresh-token:
+    expiration: 1209600 # 14일
 
-#cloud:
-#  aws:
-#    s3:
-#      bucket:
-#    stack.auto: false
-#    region.static: ap-northeast-2
-#    credentials:
-#      accessKey:
-#      secretKey:
+cloud:
+  aws:
+    s3:
+      bucket: alpha
+    stack.auto: false
+    region.static: ap-northeast-2
+    credentials:
+      accessKey: AKIAT6UNPE54SCXQWHVS
+      secretKey: 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

@@ -23,7 +23,4 @@ public class Beverage {
 
     @Column(name = "cafe")
     private String cafe;
-
-    @Column(name = "similarity")
-    private String similarity;
 }

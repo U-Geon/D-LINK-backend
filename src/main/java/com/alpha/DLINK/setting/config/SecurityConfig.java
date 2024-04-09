@@ -1,8 +1,9 @@
 package com.alpha.DLINK.setting.config;
 
+import com.alpha.DLINK.setting.jwt.filter.TokenExceptionFilter;
 import com.alpha.DLINK.setting.oauth2.service.OAuth2MemberService;
 import com.alpha.DLINK.setting.oauth2.service.OAuth2SuccessHandler;
-import com.alpha.DLINK.setting.oauth2.service.TokenAuthenticationFilter;
+import com.alpha.DLINK.setting.jwt.filter.TokenAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,7 +49,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 // 특정 URL에 대한 권한 설정.
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/", "/swagger-ui/*", "/auth/*").permitAll() // 특정 url에 대한 인가 요청 허용
+                        .requestMatchers("/", "/swagger-ui/*", "/api/*", "/login/oauth2/*").permitAll() // 특정 url에 대한 인가 요청 허용
                         .anyRequest().permitAll()
 
                 )
@@ -57,16 +58,15 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable) // 기본 인증 로그인 비활성화
                 .formLogin(AbstractHttpConfigurer::disable) // 기본 login form 비활성화
                 .oauth2Login(login -> login
-                        .userInfoEndpoint(userInfoEndpointConfig -> // OAuth2 로그인 성공 이후 사용자 정보를 가져올 때 설정 담당
+                        .userInfoEndpoint(userInfoEndpointConfig -> // OAuth2 로그인 성공 이후 사용자 정보를 가져올 때 설정
                                 userInfoEndpointConfig.userService(oAuth2MemberService)
                         )
-                        .successHandler(oAuth2SuccessHandler) //
-                )
-                // 1. 먼저, JwtAuthorizationFilter가 실행되어 요청 헤더에서 JWT 토큰을 추출하고 이 토큰을 검증한다.
-//                 // jwt 관련 설정
-                .addFilterBefore(tokenAuthenticationFilter,
-                        UsernamePasswordAuthenticationFilter.class);
-//                .addFilterBefore(new TokenExceptionFilter(), tokenAuthenticationFilter.getClass()) // 토큰 예외 핸들링
+                        .successHandler(oAuth2SuccessHandler) // 로그인 성공 이후 핸들러 처리 로직
+                );
+                // 1. 먼저, tokenAuthenticationFilter가 실행되어 요청 헤더에서 JWT 토큰을 추출하고 검증
+                // jwt 관련 설정
+//                .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(new TokenExceptionFilter(), tokenAuthenticationFilter.getClass()); // 토큰 예외 핸들링
         return httpSecurity.build();
     }
 
@@ -85,9 +85,4 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
-    /**
-     * "JWT 토큰을 통하여서 사용자를 인증한다." -> 이 메서드는 JWT 인증 필터를 생성한다.
-     * JWT 인증 필터는 요청 헤더의 JWT 토큰을 검증하고, 토큰이 유효하면 토큰에서 사용자의 정보와 권한을 추출하여 SecurityContext에 저장한다.
-     */
 }

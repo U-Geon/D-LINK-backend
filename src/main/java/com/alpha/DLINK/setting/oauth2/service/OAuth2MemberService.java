@@ -1,8 +1,8 @@
 package com.alpha.DLINK.setting.oauth2.service;
 
-import com.alpha.DLINK.member.domain.Member;
-import com.alpha.DLINK.setting.oauth2.dto.PrincipalDetails;
-import com.alpha.DLINK.member.repository.MemberRepository;
+import com.alpha.DLINK.domain.member.entity.Member;
+import com.alpha.DLINK.domain.member.MemberRepository;
+import com.alpha.DLINK.setting.oauth2.domain.CustomOauth2User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -30,32 +30,31 @@ public class OAuth2MemberService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
+        // 소셜에서 전달받은 정보를 가진 OAuth2User 에서 Map 을 추출하여 OAuth2Attribute 를 생성
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
         log.info("access token 값 : ", attributes);
 
-        String userNameAttributeName = userRequest // access token으로 받아온 kakaoId
+        String userNameAttributeName = userRequest // access token으로 받아온 kakaoId (id)
                 .getClientRegistration()
                 .getProviderDetails()
                 .getUserInfoEndpoint()
                 .getUserNameAttributeName();
 
+        log.info("userNameAttributeName : ", userNameAttributeName);
 
         // DB 로직
-        Member member = null;
+        Member member = getMember(attributes);
 
-        Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
-        if (kakaoAccount != null && kakaoAccount.containsKey("email")) {
-            String email = kakaoAccount.get("email").toString();
-
-            log.info("회원 가입 실행");
-            member = Member.create(email);
-            memberRepository.save(member);
-        } else {
-            log.error("kakao_account에서 이메일을 찾을 수 없습니다.");
-        }
-
-        return new PrincipalDetails(member, attributes, userNameAttributeName);
+        return new CustomOauth2User(member, attributes);
     }
 
+    private Member getMember(Map<String, Object> attributes) {
+        Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+        String email = kakaoAccount.get("email").toString();
+
+        Member member = memberRepository.findByEmail(email).orElse(Member.create(email));
+        memberRepository.save(member);
+        return member;
+    }
 }

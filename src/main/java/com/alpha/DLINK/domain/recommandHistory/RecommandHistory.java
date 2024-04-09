@@ -1,7 +1,7 @@
-package com.alpha.DLINK.domain.recommandHistory.domain;
+package com.alpha.DLINK.domain.recommandHistory;
 
 import com.alpha.DLINK.domain.beverage.domain.Beverage;
-import com.alpha.DLINK.domain.member.domain.Member;
+import com.alpha.DLINK.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,4 +24,18 @@ public class RecommandHistory {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "beverage_id")
     private Beverage beverage;
+
+    @Column(name = "isLike")
+    private Boolean isLike;
+
+    @Column(name = "similarity")
+    private Integer similarity;
+
+    public static RecommandHistory create() {
+        RecommandHistory recommandHistory = new RecommandHistory();
+        recommandHistory.setSimilarity(0);
+        recommandHistory.setIsLike(false);
+
+        return recommandHistory;
+    }
 }
