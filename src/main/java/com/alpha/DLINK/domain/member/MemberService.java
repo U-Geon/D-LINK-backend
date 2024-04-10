@@ -17,6 +17,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     // 회원 가입
+    @Transactional
     public Long join(Member member) {
         memberRepository.save(member);
         return member.getId();
@@ -34,13 +35,12 @@ public class MemberService {
     }
 
     // 회원 정보 수정
-    public Long update(Long id, String name) {
-        Optional<Member> findMember = memberRepository.findById(id);
-        if(findMember.isPresent()) {
-            Member member = findMember.get();
+    public Member update(Long id, String name) {
+        Member member = memberRepository.findById(id).orElse(null);
+        if(member != null) {
             member.setNickname(name);
         }
-        return id;
+        return member;
     }
 
     // 회원 탈퇴

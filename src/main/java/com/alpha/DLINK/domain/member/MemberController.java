@@ -16,19 +16,18 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @RequestMapping("/api/auth/")
 public class MemberController {
 
+    private final MemberService memberService;
     private final JwtProvider jwtProvider;
-
-    @GetMapping("/join")
-    public String test() {
-        return "에러 난다고!!";
-    }
 
     @PostMapping("/join")
     public ResponseEntity<Member> signUp(@RequestBody SignupDto signupDto,
                        @AuthenticationPrincipal CustomOauth2User customOauth2User) {
 
         Member member = customOauth2User.getMember();
-        member.setNickname(signupDto.getNickname());
+
+        Member findMember = memberService.update(member.getId(), signupDto.getNickname());
+
+        findMember.setNickname(signupDto.getNickname());
 
         String accessToken = jwtProvider.createAccessToken(member.getEmail());
 

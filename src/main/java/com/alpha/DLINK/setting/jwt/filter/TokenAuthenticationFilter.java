@@ -29,18 +29,21 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String accessToken = resolveToken(request);
 
-        // accessToken 검증
-        if (jwtProvider.isAccessToken(accessToken)) {
-            setAuthentication(accessToken);
-        } else {
-            // 만료되었을 경우 accessToken 재발급
-            String reissueAccessToken = jwtProvider.reissueAccessToken(accessToken);
+        // accessToken이 null인 경우 -> 첫 회원 가입 로직 시 토큰 필터 미적용을 위한 조건 처리
+        if(accessToken != null) {
+            // accessToken 검증
+            if (jwtProvider.isAccessToken(accessToken)) {
+                setAuthentication(accessToken);
+            } else {
+                // 만료되었을 경우 accessToken 재발급
+                String reissueAccessToken = jwtProvider.reissueAccessToken(accessToken);
 
-            if (StringUtils.hasText(reissueAccessToken)) {
-                setAuthentication(reissueAccessToken);
-                
-                // 재발급된 accessToken 다시 전달
-                response.setHeader(AUTHORIZATION, TOKEN_PREFIX + reissueAccessToken);
+                if (StringUtils.hasText(reissueAccessToken)) {
+                    setAuthentication(reissueAccessToken);
+
+                    // 재발급된 accessToken 다시 전달
+                    response.setHeader(AUTHORIZATION, TOKEN_PREFIX + reissueAccessToken);
+                }
             }
         }
 

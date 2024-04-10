@@ -1,4 +1,4 @@
-package com.alpha.DLINK.config;
+package com.alpha.DLINK.setting.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
