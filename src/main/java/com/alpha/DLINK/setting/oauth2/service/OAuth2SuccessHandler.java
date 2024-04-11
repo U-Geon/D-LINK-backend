@@ -36,7 +36,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         if (authentication.getPrincipal() instanceof OAuth2User) {
             CustomOauth2User principal = (CustomOauth2User) authentication.getPrincipal();
             Member member = principal.getMember();
-            log.info("member : {}", member.getNickname()); // 수정된 부분
+            log.info("member's nickname : {}", member.getNickname()); // 수정된 부분
 
             // jwt 토큰 생성 후 헤더에 담아주기.
             String accessToken = jwtProvider.createAccessToken(member.getEmail());
@@ -55,7 +55,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                 objectMapper.writeValue(response.getWriter(), responseBody);
             } else {
 
-                // refresh token을 저장해야 하는데...
+                // refresh token을 저장해야 하는데... ()
 //                String refreshToken = jwtProvider.createRefreshToken(member.getEmail());
 
 //                jwtService.save(new RefreshToken(refreshToken, member.getId()));

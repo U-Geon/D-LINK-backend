@@ -2,6 +2,7 @@ package com.alpha.DLINK.domain.post;
 
 
 import com.alpha.DLINK.domain.file.File;
+import com.alpha.DLINK.domain.likeHistory.LikeHistory;
 import com.alpha.DLINK.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,6 +18,7 @@ import java.util.List;
 @Getter @Setter
 @EntityListeners(AuditingEntityListener.class)
 public class Post {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
@@ -30,20 +32,15 @@ public class Post {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "likes", columnDefinition = "integer default 0")
+    @Column(name = "likes")
     private Integer likes;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "member_id")
-    private Member member;
-
-    @OneToMany(mappedBy = "post")
+    // 지울 때 같이 삭제 & 생성할 때 같이 영속화하기!
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<File> files = new ArrayList<>();
 
-    public void setMember(Member member) {
-        this.member = member;
-        member.getPosts().add(this);
-    }
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<LikeHistory> likeHistories = new ArrayList<>();
 
     public static Post create(String title, String content) {
         Post post = new Post();

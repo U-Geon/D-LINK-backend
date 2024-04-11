@@ -2,6 +2,8 @@ package com.alpha.DLINK.domain.post;
 
 
 import com.alpha.DLINK.domain.file.File;
+import com.alpha.DLINK.domain.likeHistory.LikeHistory;
+import com.alpha.DLINK.domain.likeHistory.LikeHistoryRepository;
 import com.alpha.DLINK.domain.member.entity.Member;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -16,7 +18,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class PostService {
 
     private final AmazonS3 amazonS3;
@@ -25,8 +27,10 @@ public class PostService {
     private String bucket;
 
     private final PostRepository postRepository;
+    private final LikeHistoryRepository likeHistoryRepository;
 
     // 게시글 생성 로직
+    @Transactional
     public void create(String title,
                        String content,
                        Member member,
@@ -34,7 +38,6 @@ public class PostService {
 
         try {
             Post post = Post.create(title, content);
-            post.setMember(member);
 
             for (MultipartFile file : files) {
                 String fileName = file.getOriginalFilename();
@@ -47,9 +50,12 @@ public class PostService {
 
                 amazonS3.putObject(bucket, fileName, file.getInputStream(), metadata);
 
-                File fileAttr = File.create(fileUrl);
-                fileAttr.setPost(post);
+                File fileAttr = File.create(fileUrl, post);
             }
+
+            LikeHistory likeHistory = LikeHistory.create(member, post);
+
+            likeHistoryRepository.save(likeHistory);
             postRepository.save(post);
         } catch (IOException e) {
             e.printStackTrace();
@@ -57,18 +63,16 @@ public class PostService {
     }
 
     // 사용자별 게시글 조회
-    @Transactional(readOnly = true)
-    public List<Post> getPostsByMemberId(Long memberId) {
-        return postRepository.findByMemberId(memberId);
-    }
 
     // 게시글 업데이트
+    @Transactional
     public void update(Post post, String title, String content) {
         post.setTitle(title);
         post.setContent(content);
     }
 
     // 게시글 삭제
+    @Transactional
     public void delete(Post post) {
         postRepository.delete(post);
     }

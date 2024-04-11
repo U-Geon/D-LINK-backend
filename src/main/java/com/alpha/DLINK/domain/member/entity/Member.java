@@ -1,6 +1,8 @@
 package com.alpha.DLINK.domain.member.entity;
 
+import com.alpha.DLINK.domain.likeHistory.LikeHistory;
 import com.alpha.DLINK.domain.post.Post;
+import com.alpha.DLINK.domain.recommandHistory.RecommandHistory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,15 +20,18 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, name = "nickname")
     private String nickname;
 
     @Column(unique = true, name = "email", nullable = false)
     private String email;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-    @JsonIgnore
-    private List<Post> posts = new ArrayList<>();
+    private List<LikeHistory> likeHistories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<RecommandHistory> recommandHistories = new ArrayList<>();
+
 
     public static Member create(String email) {
         Member member = new Member();

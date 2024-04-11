@@ -13,12 +13,13 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/auth/")
+@RequestMapping("/api/auth")
 public class MemberController {
 
     private final MemberService memberService;
     private final JwtProvider jwtProvider;
 
+    // oauth2 login 이후 생성된 OAuth2User 객체를 사용하기 위해 @AuthenticationPrincipal 사용!
     @PostMapping("/join")
     public ResponseEntity<Member> signUp(@RequestBody SignupDto signupDto,
                        @AuthenticationPrincipal CustomOauth2User customOauth2User) {

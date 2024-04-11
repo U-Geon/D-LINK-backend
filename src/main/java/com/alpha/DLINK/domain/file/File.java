@@ -18,19 +18,19 @@ public class File {
     @Column(nullable = false)
     private String url;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public void setPost(Post post) {
+    private void setPost(Post post) {
         this.post = post;
         post.getFiles().add(this);
     }
 
-    public static File create(String url) {
+    public static File create(String url, Post post) {
         File file = new File();
         file.setUrl(url);
-
+        file.setPost(post);
         return file;
     }
 }

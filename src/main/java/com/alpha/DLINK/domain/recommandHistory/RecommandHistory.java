@@ -20,7 +20,6 @@ public class RecommandHistory {
     @JoinColumn(name = "member_id")
     private Member member;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "beverage_id")
     private Beverage beverage;
@@ -31,10 +30,21 @@ public class RecommandHistory {
     @Column(name = "similarity")
     private Integer similarity;
 
-    public static RecommandHistory create() {
+    private void setMember(Member member) {
+        this.member = member;
+        member.getRecommandHistories().add(this);
+    }
+
+    private void setBeverage(Beverage beverage) {
+        this.beverage = beverage;
+        beverage.getRecommandHistories().add(this);
+    }
+    public static RecommandHistory create(Member member, Beverage beverage) {
         RecommandHistory recommandHistory = new RecommandHistory();
         recommandHistory.setSimilarity(0);
         recommandHistory.setIsLike(false);
+        recommandHistory.setMember(member);
+        recommandHistory.setBeverage(beverage);
 
         return recommandHistory;
     }

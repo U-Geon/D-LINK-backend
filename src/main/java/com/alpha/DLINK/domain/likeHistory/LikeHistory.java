@@ -17,19 +17,32 @@ public class LikeHistory {
     @Column(name = "like_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @Column(name = "is_like")
     private Boolean isLike;
 
-    public static LikeHistory create() {
+    private void setMember(Member member) {
+        this.member = member;
+        member.getLikeHistories().add(this);
+    }
+
+    private void setPost(Post post) {
+        this.post = post;
+        post.getLikeHistories().add(this);
+    }
+
+    public static LikeHistory create(Member member, Post post) {
         LikeHistory likeHistory = new LikeHistory();
         likeHistory.setIsLike(false);
+        likeHistory.setMember(member);
+        likeHistory.setPost(post);
         return likeHistory;
     }
 }
