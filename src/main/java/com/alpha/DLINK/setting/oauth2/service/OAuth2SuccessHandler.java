@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -35,12 +36,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         if (authentication.getPrincipal() instanceof OAuth2User) {
             CustomOauth2User principal = (CustomOauth2User) authentication.getPrincipal();
-            Member member = principal.getMember();
-            log.info("member's nickname : {}", member.getNickname()); // 수정된 부분
 
-            // jwt 토큰 생성 후 헤더에 담아주기.
-            String accessToken = jwtProvider.createAccessToken(member.getEmail());
-            response.addHeader("Authorization", "Bearer " + accessToken);
+            Member member = principal.getMember();
+            log.info("member : {} {} ", member.getId(), member.getNickname()); // 수정된 부분
 
             if (member.getNickname() == null) {
                 // JSON 형태로 변환하여 response body에 쓰기 -> tokenfilter에서 이미 null처리가 되어버림.
@@ -53,12 +51,16 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                 response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.writeValue(response.getWriter(), responseBody);
+
             } else {
 
-                // refresh token을 저장해야 하는데... ()
+                // refresh token을 저장해야 하는데 redis 사용 안하고 그냥
 //                String refreshToken = jwtProvider.createRefreshToken(member.getEmail());
-
 //                jwtService.save(new RefreshToken(refreshToken, member.getId()));
+
+                // jwt 토큰 생성 후 헤더에 담아주기.
+                String accessToken = jwtProvider.createAccessToken(member.getEmail(), member.getId());
+                response.addHeader("Authorization", "Bearer " + accessToken);
 
                 // 응답 본문에 메시지 추가
                 response.setStatus(HttpStatus.OK.value());

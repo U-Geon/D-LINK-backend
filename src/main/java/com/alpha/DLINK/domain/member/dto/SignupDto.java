@@ -10,5 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SignupDto {
 
+    private String email;
     private String nickname;
 }

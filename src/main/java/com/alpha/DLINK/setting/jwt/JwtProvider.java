@@ -1,16 +1,24 @@
 package com.alpha.DLINK.setting.jwt;
 
+import com.alpha.DLINK.setting.oauth2.domain.CustomOauth2User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import jakarta.transaction.SystemException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.util.Date;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -32,6 +40,13 @@ public class JwtProvider {
         JWTVerifier verifier = JWT.require(algorithm).build();
         DecodedJWT jwt = verifier.verify(token);
         return jwt.getClaim("email").toString();
+    }
+
+    public String getId(String token) {
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        DecodedJWT jwt = verifier.verify(token);
+        return jwt.getClaim("member_id").toString();
     }
 
     // 토큰 유효 및 만료 확인
@@ -64,18 +79,19 @@ public class JwtProvider {
     }
 
     // access 토큰 생성
-    public String createAccessToken(String email) {
-        return createJwt(email, "access", accessTokenValidTime);
+    public String createAccessToken(String email, Long id) {
+        return createJwt(email, id, "access", accessTokenValidTime);
     }
 
     // refresh 토큰 생성
-    public String createRefreshToken(String email) {
-        return createJwt(email, "refresh", refreshTokenValidTime);
+    public String createRefreshToken(String email, Long id) {
+        return createJwt(email, id, "refresh", refreshTokenValidTime);
     }
 
-    private String createJwt(String email, String type, Long tokenValidTime) {
+    private String createJwt(String email, Long id, String type, Long tokenValidTime) {
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         return JWT.create()
+                .withSubject(String.valueOf(id)) // jwt토큰의 subject [토큰 생성 주체] (member Id로 설정)
                 .withClaim("email", email)
                 .withClaim("type", type)
                 .withIssuedAt(Date.from(Instant.now()))
@@ -89,7 +105,8 @@ public class JwtProvider {
             throw new IllegalArgumentException("Invalid or expired refresh token");
         }
         String email = getEmail(accessToken);
-        return createAccessToken(email);
+        Long id = Long.parseLong(getId(accessToken));
+        return createAccessToken(email, id);
     }
 
     // 리프레시 토큰 재발급 (필요한 경우)
@@ -98,11 +115,22 @@ public class JwtProvider {
             throw new IllegalArgumentException("Invalid or expired refresh token");
         }
         String email = getEmail(refreshToken);
-        return createRefreshToken(email);
+        Long id = Long.parseLong(getId(refreshToken));
+        return createRefreshToken(email, id);
     }
 
-    public Authentication getAuthentication(String accessToken) {
+    public Authentication getAuthentication(String token) {
+        DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(secretKey)).build().verify(token);
 
-        return null;
+        List<SimpleGrantedAuthority> authorities = getAuthorities("user");
+
+        User principal = new User(decodedJWT.getSubject(), "", authorities);
+        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+    }
+
+    private List<SimpleGrantedAuthority> getAuthorities(String role) {
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(role));
+        return authorities;
     }
 }

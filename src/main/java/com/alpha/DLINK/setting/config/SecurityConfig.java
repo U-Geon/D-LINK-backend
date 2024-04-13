@@ -62,11 +62,10 @@ public class SecurityConfig {
                                 userInfoEndpointConfig.userService(oAuth2MemberService)
                         )
                         .successHandler(oAuth2SuccessHandler) // 로그인 성공 이후 핸들러 처리 로직
-                );
-                // 1. 먼저, tokenAuthenticationFilter가 실행되어 요청 헤더에서 JWT 토큰을 추출하고 검증
+                )
                 // jwt 관련 설정
-//                .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-//                .addFilterBefore(new TokenExceptionFilter(), tokenAuthenticationFilter.getClass()); // 토큰 예외 핸들링
+                .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new TokenExceptionFilter(), tokenAuthenticationFilter.getClass()); // 토큰 예외 핸들링
         return httpSecurity.build();
     }
 

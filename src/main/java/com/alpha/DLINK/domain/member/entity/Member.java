@@ -32,7 +32,6 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<RecommandHistory> recommandHistories = new ArrayList<>();
 
-
     public static Member create(String email) {
         Member member = new Member();
         member.setEmail(email);

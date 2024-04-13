@@ -3,16 +3,20 @@ package com.alpha.DLINK.domain.member;
 import com.alpha.DLINK.domain.member.dto.SignupDto;
 import com.alpha.DLINK.domain.member.entity.Member;
 import com.alpha.DLINK.setting.jwt.JwtProvider;
-import com.alpha.DLINK.setting.oauth2.domain.CustomOauth2User;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/api/auth")
 public class MemberController {
 
@@ -21,19 +25,15 @@ public class MemberController {
 
     // oauth2 login 이후 생성된 OAuth2User 객체를 사용하기 위해 @AuthenticationPrincipal 사용!
     @PostMapping("/join")
-    public ResponseEntity<Member> signUp(@RequestBody SignupDto signupDto,
-                       @AuthenticationPrincipal CustomOauth2User customOauth2User) {
+    public ResponseEntity<Object> signUp(@RequestBody SignupDto signupDto) {
+        Member member = memberService.findByEmail(signupDto.getEmail());
 
-        Member member = customOauth2User.getMember();
+        memberService.update(member, signupDto.getNickname());
 
-        Member findMember = memberService.update(member.getId(), signupDto.getNickname());
-
-        findMember.setNickname(signupDto.getNickname());
-
-        String accessToken = jwtProvider.createAccessToken(member.getEmail());
+        String accessToken = jwtProvider.createAccessToken(member.getEmail(), member.getId()); // 토큰 생성
 
         return ResponseEntity.ok()
                 .header(AUTHORIZATION, "Bearer" + accessToken)
-                .body(member);
+                .body("{\"msg\" : \"success\"}");
     }
 }

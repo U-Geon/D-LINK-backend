@@ -33,15 +33,15 @@ public class OAuth2MemberService extends DefaultOAuth2UserService {
         // 소셜에서 전달받은 정보를 가진 OAuth2User 에서 Map 을 추출하여 OAuth2Attribute 를 생성
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
-        log.info("access token 값 : ", attributes);
+        log.info("access token 값 : {} ", attributes);
 
-        String userNameAttributeName = userRequest // access token으로 받아온 kakaoId (id)
+        String userNameAttributeName = userRequest // yml에서 설정해준 값 : (id)
                 .getClientRegistration()
                 .getProviderDetails()
                 .getUserInfoEndpoint()
                 .getUserNameAttributeName();
 
-        log.info("userNameAttributeName : ", userNameAttributeName);
+        log.info("userNameAttributeName : {}", userNameAttributeName);
 
         // DB 로직
         Member member = getMember(attributes);

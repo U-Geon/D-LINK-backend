@@ -3,6 +3,7 @@ package com.alpha.DLINK.setting.oauth2.domain;
 import com.alpha.DLINK.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -18,6 +19,10 @@ public class CustomOauth2User implements UserDetails, OAuth2User {
 
     private Member member; // 사용자의 식별자
     private Map<String, Object> attributes; // 기타 사용자 정보 (예: 이메일, 이름 등)
+
+    public CustomOauth2User(Map<String, Object> attributes) {
+        this.attributes = attributes;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
