@@ -1,11 +1,9 @@
 package com.alpha.DLINK.domain.beverage.domain;
 
+import com.alpha.DLINK.domain.cafe.domain.Cafe;
 import com.alpha.DLINK.domain.recommandHistory.RecommandHistory;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +11,9 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-
+@AllArgsConstructor
 public class Beverage {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -25,8 +24,9 @@ public class Beverage {
     @Embedded
     private Nutrition nutrition;
 
-    @Column(name = "cafe")
-    private String cafe;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "cafe_id")
+    private Cafe cafe;
 
     @OneToMany(mappedBy = "beverage", cascade = CascadeType.ALL)
     private List<RecommandHistory> recommandHistories = new ArrayList<>();

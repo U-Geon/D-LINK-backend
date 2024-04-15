@@ -1,7 +1,8 @@
-package com.alpha.DLINK.domain.post;
+package com.alpha.DLINK.domain.post.controller;
 
-import com.alpha.DLINK.domain.likeHistory.LikeHistoryService;
-import com.alpha.DLINK.domain.member.MemberService;
+import com.alpha.DLINK.domain.likeHistory.service.LikeHistoryService;
+import com.alpha.DLINK.domain.member.service.MemberService;
+import com.alpha.DLINK.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

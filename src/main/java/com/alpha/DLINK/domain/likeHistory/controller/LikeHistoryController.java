@@ -1,6 +1,8 @@
-package com.alpha.DLINK.domain.likeHistory;
+package com.alpha.DLINK.domain.likeHistory.controller;
 
 
+import com.alpha.DLINK.domain.likeHistory.service.LikeHistoryService;
+import com.alpha.DLINK.domain.likeHistory.domain.LikeHistory;
 import com.alpha.DLINK.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;

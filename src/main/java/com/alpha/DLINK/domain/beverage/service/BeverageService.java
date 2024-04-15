@@ -1,6 +1,7 @@
-package com.alpha.DLINK.domain.beverage;
+package com.alpha.DLINK.domain.beverage.service;
 
 
+import com.alpha.DLINK.domain.beverage.repository.BeverageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

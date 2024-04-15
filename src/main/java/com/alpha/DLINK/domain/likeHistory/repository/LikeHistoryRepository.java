@@ -1,5 +1,6 @@
-package com.alpha.DLINK.domain.likeHistory;
+package com.alpha.DLINK.domain.likeHistory.repository;
 
+import com.alpha.DLINK.domain.likeHistory.domain.LikeHistory;
 import com.alpha.DLINK.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

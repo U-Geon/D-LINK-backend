@@ -1,7 +1,7 @@
 package com.alpha.DLINK.setting.oauth2.service;
 
 import com.alpha.DLINK.domain.member.entity.Member;
-import com.alpha.DLINK.domain.member.MemberRepository;
+import com.alpha.DLINK.domain.member.repository.MemberRepository;
 import com.alpha.DLINK.setting.oauth2.domain.CustomOauth2User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

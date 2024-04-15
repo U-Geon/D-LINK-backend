@@ -1,7 +1,7 @@
-package com.alpha.DLINK.domain.file;
+package com.alpha.DLINK.domain.file.domain;
 
 
-import com.alpha.DLINK.domain.post.Post;
+import com.alpha.DLINK.domain.post.domain.Post;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

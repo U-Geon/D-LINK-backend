@@ -1,7 +1,8 @@
-package com.alpha.DLINK.domain.member;
+package com.alpha.DLINK.domain.member.service;
 
 
 import com.alpha.DLINK.domain.member.entity.Member;
+import com.alpha.DLINK.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

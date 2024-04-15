@@ -1,7 +1,7 @@
-package com.alpha.DLINK.domain.likeHistory;
+package com.alpha.DLINK.domain.likeHistory.domain;
 
 import com.alpha.DLINK.domain.member.entity.Member;
-import com.alpha.DLINK.domain.post.Post;
+import com.alpha.DLINK.domain.post.domain.Post;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

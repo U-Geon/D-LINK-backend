@@ -1,9 +1,7 @@
-package com.alpha.DLINK.domain.file;
+package com.alpha.DLINK.domain.file.repository;
 
-import com.alpha.DLINK.domain.file.File;
+import com.alpha.DLINK.domain.file.domain.File;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 

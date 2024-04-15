@@ -1,10 +1,12 @@
-package com.alpha.DLINK.domain.post;
+package com.alpha.DLINK.domain.post.service;
 
 
-import com.alpha.DLINK.domain.file.File;
-import com.alpha.DLINK.domain.likeHistory.LikeHistory;
-import com.alpha.DLINK.domain.likeHistory.LikeHistoryRepository;
+import com.alpha.DLINK.domain.file.domain.File;
+import com.alpha.DLINK.domain.likeHistory.domain.LikeHistory;
+import com.alpha.DLINK.domain.likeHistory.repository.LikeHistoryRepository;
 import com.alpha.DLINK.domain.member.entity.Member;
+import com.alpha.DLINK.domain.post.domain.Post;
+import com.alpha.DLINK.domain.post.repository.PostRepository;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
@@ -74,6 +76,9 @@ public class PostService {
     // 게시글 삭제
     @Transactional
     public void delete(Post post) {
+
+
+
         postRepository.delete(post);
     }
 }
