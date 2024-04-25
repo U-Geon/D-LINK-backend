@@ -1,9 +1,9 @@
 package com.alpha.DLINK.setting.config;
 
-import com.alpha.DLINK.setting.jwt.filter.TokenExceptionFilter;
-import com.alpha.DLINK.setting.oauth2.service.OAuth2MemberService;
-import com.alpha.DLINK.setting.oauth2.service.OAuth2SuccessHandler;
-import com.alpha.DLINK.setting.jwt.filter.TokenAuthenticationFilter;
+import com.alpha.DLINK.setting.security.jwt.filter.TokenExceptionFilter;
+import com.alpha.DLINK.setting.security.oauth2.service.OAuth2MemberService;
+import com.alpha.DLINK.setting.security.oauth2.service.OAuth2SuccessHandler;
+import com.alpha.DLINK.setting.security.jwt.filter.TokenAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

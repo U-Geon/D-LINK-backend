@@ -1,8 +1,8 @@
-package com.alpha.DLINK.setting.oauth2.service;
+package com.alpha.DLINK.setting.security.oauth2.service;
 
 import com.alpha.DLINK.domain.member.entity.Member;
-import com.alpha.DLINK.setting.jwt.JwtProvider;
-import com.alpha.DLINK.setting.oauth2.domain.CustomOauth2User;
+import com.alpha.DLINK.setting.security.jwt.JwtProvider;
+import com.alpha.DLINK.setting.security.oauth2.domain.CustomOauth2User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -59,7 +58,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 //                jwtService.save(new RefreshToken(refreshToken, member.getId()));
 
                 // jwt 토큰 생성 후 헤더에 담아주기.
-                String accessToken = jwtProvider.createAccessToken(member.getEmail(), member.getId());
+                String accessToken = jwtProvider.generateAccessToken(authentication);
                 response.addHeader("Authorization", "Bearer " + accessToken);
 
                 // 응답 본문에 메시지 추가

@@ -1,4 +1,4 @@
-package com.alpha.DLINK.setting.oauth2.domain;
+package com.alpha.DLINK.setting.security.oauth2.domain;
 
 import com.alpha.DLINK.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
@@ -66,6 +66,6 @@ public class CustomOauth2User implements UserDetails, OAuth2User {
     // 사용자 id 추출
     @Override
     public String getName() {
-        return member.getId().toString();
+        return member.getNickname();
     }
 }

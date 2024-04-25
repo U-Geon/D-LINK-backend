@@ -1,4 +1,4 @@
-package com.alpha.DLINK.setting.jwt.filter;
+package com.alpha.DLINK.setting.security.jwt.filter;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import jakarta.servlet.FilterChain;
@@ -20,7 +20,7 @@ public class TokenExceptionFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } catch (TokenExpiredException e) {
-            response.sendError(401 ,e.getMessage()); // 토큰 만료 에러
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 토큰 만료 에러
         }
     }
 }

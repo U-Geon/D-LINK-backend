@@ -1,8 +1,8 @@
-package com.alpha.DLINK.setting.oauth2.service;
+package com.alpha.DLINK.setting.security.oauth2.service;
 
 import com.alpha.DLINK.domain.member.entity.Member;
 import com.alpha.DLINK.domain.member.repository.MemberRepository;
-import com.alpha.DLINK.setting.oauth2.domain.CustomOauth2User;
+import com.alpha.DLINK.setting.security.oauth2.domain.CustomOauth2User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
