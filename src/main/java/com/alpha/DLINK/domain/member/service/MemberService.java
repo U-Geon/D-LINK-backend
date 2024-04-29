@@ -23,6 +23,7 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
+    // 이메일 기준 회원 조회
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email).orElse(null);
     }

@@ -1,4 +1,4 @@
-package com.alpha.DLINK.domain.recommandHistory;
+package com.alpha.DLINK.domain.recommandHistory.domain;
 
 import com.alpha.DLINK.domain.beverage.domain.Beverage;
 import com.alpha.DLINK.domain.member.entity.Member;

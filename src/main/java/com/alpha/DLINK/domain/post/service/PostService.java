@@ -64,7 +64,10 @@ public class PostService {
         }
     }
 
-    // 사용자별 게시글 조회
+    // 게시글 전체 조회
+    public List<Post> findAll() {
+        return postRepository.findAll();
+    }
 
     // 게시글 업데이트
     @Transactional

@@ -12,5 +12,4 @@ public interface LikeHistoryRepository extends JpaRepository<LikeHistory, Long> 
 
     @Query("SELECT lh FROM LikeHistory lh WHERE lh.member = :member")
     List<LikeHistory> findLikeHistoryByMember(@Param("member") Member member);
-
 }

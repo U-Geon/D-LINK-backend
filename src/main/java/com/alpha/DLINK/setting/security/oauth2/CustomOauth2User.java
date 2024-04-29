@@ -1,9 +1,8 @@
-package com.alpha.DLINK.setting.security.oauth2.domain;
+package com.alpha.DLINK.setting.security.oauth2;
 
 import com.alpha.DLINK.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;

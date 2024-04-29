@@ -1,6 +1,6 @@
 package com.alpha.DLINK.setting.security.jwt;
 
-import com.alpha.DLINK.setting.security.oauth2.domain.CustomOauth2User;
+import com.alpha.DLINK.setting.security.oauth2.CustomOauth2User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;

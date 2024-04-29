@@ -15,7 +15,6 @@ public class LikeHistoryController {
 
     private final LikeHistoryService likeHistoryService;
 
-
     // 사용자 별 음료 히스토리 보여주기
     public List<LikeHistory> findByMember(Member member) {
         return likeHistoryService.findByMember(member);

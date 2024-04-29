@@ -1,7 +1,7 @@
 package com.alpha.DLINK.domain.beverage.domain;
 
 import com.alpha.DLINK.domain.cafe.domain.Cafe;
-import com.alpha.DLINK.domain.recommandHistory.RecommandHistory;
+import com.alpha.DLINK.domain.recommandHistory.domain.RecommandHistory;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,6 +27,9 @@ public class Beverage {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "cafe_id")
     private Cafe cafe;
+
+    @Column(name = "photo")
+    private String photo;
 
     @OneToMany(mappedBy = "beverage", cascade = CascadeType.ALL)
     private List<RecommandHistory> recommandHistories = new ArrayList<>();

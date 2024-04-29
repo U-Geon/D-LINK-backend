@@ -2,7 +2,7 @@ package com.alpha.DLINK.setting.security.oauth2.service;
 
 import com.alpha.DLINK.domain.member.entity.Member;
 import com.alpha.DLINK.setting.security.jwt.JwtProvider;
-import com.alpha.DLINK.setting.security.oauth2.domain.CustomOauth2User;
+import com.alpha.DLINK.setting.security.oauth2.CustomOauth2User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

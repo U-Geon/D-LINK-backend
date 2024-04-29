@@ -1,14 +1,14 @@
 package com.alpha.DLINK.domain.member.entity;
 
 import com.alpha.DLINK.domain.likeHistory.domain.LikeHistory;
-import com.alpha.DLINK.domain.recommandHistory.RecommandHistory;
+import com.alpha.DLINK.domain.recommandHistory.domain.RecommandHistory;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,6 +21,7 @@ public class Member implements UserDetails {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
+    @JsonIgnore
     private Long id;
 
     @Column(unique = true, name = "nickname")
