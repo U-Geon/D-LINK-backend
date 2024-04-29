@@ -71,17 +71,15 @@ public class PostService {
 
     // 게시글 업데이트
     @Transactional
-    public void update(Post post, String title, String content) {
+    public Post update(Post post, String title, String content) {
         post.setTitle(title);
         post.setContent(content);
+        return post;
     }
 
     // 게시글 삭제
     @Transactional
     public void delete(Post post) {
-
-
-
         postRepository.delete(post);
     }
 }

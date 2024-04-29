@@ -1,12 +1,10 @@
 package com.alpha.DLINK.flask.dto;
 
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter @Setter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class PromptRequest {
-    private final String prompt;
+    private String prompt;
 }

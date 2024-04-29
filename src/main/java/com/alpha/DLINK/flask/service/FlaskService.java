@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -31,12 +32,13 @@ public class FlaskService {
 
         String param = objectMapper.writeValueAsString(dto);
 
-        HttpEntity<String> entity = new HttpEntity<String>(param , headers);
+        HttpEntity<String> entity = new HttpEntity<>(param, headers);
 
         //실제 Flask 서버랑 연결하기 위한 URL
-        String url = "http://127.0.0.1:8082/prompt";
+        String url = "http://10.30.119.172:8000/prediction";
 
         //Flask 서버로 데이터를 전송하고 받은 응답 값을 return
-        return restTemplate.postForObject(url, entity, String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
+        return response.getBody();
     }
 }

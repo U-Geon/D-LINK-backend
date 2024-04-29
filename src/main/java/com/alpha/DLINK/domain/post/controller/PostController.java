@@ -7,6 +7,7 @@ import com.alpha.DLINK.domain.post.domain.Post;
 import com.alpha.DLINK.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,24 +32,20 @@ public class PostController {
      */
     @GetMapping
     public List<Post> findAll(@AuthenticationPrincipal Member member) {
-
-        try {
-            return postService.findAll();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return postService.findAll();
     }
 
     // 게시글 생성
     @PostMapping("/create")
-    public void createPost(@RequestParam("files") List<MultipartFile> files,
+    public void createPost(@AuthenticationPrincipal Member member,
+            @RequestParam("files") List<MultipartFile> files,
                            @RequestParam("title") String title,
-                           @RequestParam("content") String content,
-                           @RequestParam("hashtags") List<String> hashtags) {
+                           @RequestParam("content") String content) {
         try {
-            Member member = memberService.findById(memberId);
+            Member findMember = memberService.findByEmail(member.getEmail());
+            postService.create(title, content, findMember, files);
 
-            log.info(String.valueOf(member));
+//            return ResponseEntity.ok().body("");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

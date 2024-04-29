@@ -2,6 +2,7 @@ package com.alpha.DLINK.domain.post.controller;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -24,24 +25,19 @@ public class FileUploadController {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    @PostMapping("/")
-    public ResponseEntity<List<String>> uploadFiles(@RequestParam("files") List<MultipartFile> files) {
-        List<String> fileUrls = new ArrayList<>();
-
+    @PostMapping
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
-            for (MultipartFile file : files) {
-                String fileName = file.getOriginalFilename();
-                String fileUrl = "https://" + bucket + "/test/" + fileName;
+            String fileName = file.getOriginalFilename();
+            String fileUrl = "https://" + bucket + "/post_image/" + fileName;
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(file.getContentType());
+            metadata.setContentLength(file.getSize());
 
-                ObjectMetadata metadata = new ObjectMetadata();
-                metadata.setContentType(file.getContentType());
-                metadata.setContentLength(file.getSize());
+            PutObjectRequest request = new PutObjectRequest(bucket, "post_image/" + fileName, file.getInputStream(), metadata);
+            amazonS3.putObject(request);
 
-                amazonS3.putObject(bucket, fileName, file.getInputStream(), metadata);
-                fileUrls.add(fileUrl);
-            }
-
-            return ResponseEntity.ok(fileUrls);
+            return ResponseEntity.ok(fileUrl);
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
