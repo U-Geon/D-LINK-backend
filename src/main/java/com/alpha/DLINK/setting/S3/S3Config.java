@@ -1,4 +1,4 @@
-package com.alpha.DLINK.setting.config;
+package com.alpha.DLINK.setting.S3;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class S3Config {
-   @Value("${cloud.aws.credentials.access-key}")
+   @Value("${s3.credentials.accessKey}")
    private String accessKey;
-   @Value("${cloud.aws.credentials.secret-key}")
+   @Value("${s3.credentials.secretKey}")
    private String secretKey;
-   @Value("${cloud.aws.region.static}")
+   @Value("${s3.region.static}")
    private String region;
 
    @Bean

@@ -17,7 +17,6 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-
     // 전체 회원 조회
     public List<Member> findAll() {
         return memberRepository.findAll();
@@ -38,9 +37,9 @@ public class MemberService {
     // 회원 탈퇴
     @Transactional
     public void delete(Long id) {
-        Optional<Member> byId = memberRepository.findById(id);
-        if(byId.isPresent()) {
-            Member member = byId.get();
+        Optional<Member> find = memberRepository.findById(id);
+        if(find.isPresent()) {
+            Member member = find.get();
             memberRepository.delete(member);
         }
     }

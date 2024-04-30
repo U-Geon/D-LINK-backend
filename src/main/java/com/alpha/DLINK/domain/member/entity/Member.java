@@ -1,7 +1,7 @@
 package com.alpha.DLINK.domain.member.entity;
 
 import com.alpha.DLINK.domain.likeHistory.domain.LikeHistory;
-import com.alpha.DLINK.domain.recommandHistory.domain.RecommandHistory;
+import com.alpha.DLINK.domain.recommendHistory.domain.RecommendHistory;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +34,7 @@ public class Member implements UserDetails {
     private List<LikeHistory> likeHistories = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-    private List<RecommandHistory> recommandHistories = new ArrayList<>();
+    private List<RecommendHistory> recommandHistories = new ArrayList<>();
 
     public static Member create(String email) {
         Member member = new Member();

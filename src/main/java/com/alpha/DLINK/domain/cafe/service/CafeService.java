@@ -9,6 +9,4 @@ import org.springframework.stereotype.Service;
 public class CafeService {
 
     private final CafeRepository cafeRepository;
-
-
 }

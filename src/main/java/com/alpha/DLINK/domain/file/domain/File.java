@@ -16,6 +16,9 @@ public class File {
     private Long id;
 
     @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -27,9 +30,10 @@ public class File {
         post.getFiles().add(this);
     }
 
-    public static File create(String url, Post post) {
+    public static File create(String url, String name, Post post) {
         File file = new File();
         file.setUrl(url);
+        file.setName(name);
         file.setPost(post);
         return file;
     }

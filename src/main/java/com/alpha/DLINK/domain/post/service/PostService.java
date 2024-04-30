@@ -6,7 +6,9 @@ import com.alpha.DLINK.domain.likeHistory.domain.LikeHistory;
 import com.alpha.DLINK.domain.likeHistory.repository.LikeHistoryRepository;
 import com.alpha.DLINK.domain.member.entity.Member;
 import com.alpha.DLINK.domain.post.domain.Post;
+import com.alpha.DLINK.domain.post.dto.FindPostDto;
 import com.alpha.DLINK.domain.post.repository.PostRepository;
+import com.alpha.DLINK.setting.S3.S3FileService;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +33,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final LikeHistoryRepository likeHistoryRepository;
+    private final S3FileService s3FileService;
 
     // 게시글 생성 로직
     @Transactional
@@ -43,30 +47,27 @@ public class PostService {
 
             for (MultipartFile file : files) {
                 String fileName = file.getOriginalFilename();
-                String fileUrl = "https://" +
-                        bucket + "/test/" + fileName;
-
-                ObjectMetadata metadata = new ObjectMetadata();
-                metadata.setContentType(file.getContentType());
-                metadata.setContentLength(file.getSize());
-
-                amazonS3.putObject(bucket, fileName, file.getInputStream(), metadata);
-
-                File fileAttr = File.create(fileUrl, post);
+                String fileUrl = s3FileService.createPostImageFile(file);
+                File.create(fileUrl, fileName, post);
             }
 
             LikeHistory likeHistory = LikeHistory.create(member, post);
 
             likeHistoryRepository.save(likeHistory);
-            postRepository.save(post);
+            postRepository.save(post); // cascade에 의해 자동 영속화 됨.
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     // 게시글 전체 조회
-    public List<Post> findAll() {
-        return postRepository.findAll();
+    // DTO 써서 post랑 file이랑 같이 조회!
+    public List<FindPostDto> findAll() {
+        return postRepository.findAll().stream().map(FindPostDto::new).collect(Collectors.toList());
+    }
+
+    public Post findById(Long id) {
+        return postRepository.findById(id).orElse(null);
     }
 
     // 게시글 업데이트

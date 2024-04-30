@@ -52,7 +52,6 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                 objectMapper.writeValue(response.getWriter(), responseBody);
 
             } else {
-
                 // refresh token을 저장해야 하는데 redis 사용 안하고 그냥
 //                String refreshToken = jwtProvider.createRefreshToken(member.getEmail());
 //                jwtService.save(new RefreshToken(refreshToken, member.getId()));

@@ -1,4 +1,4 @@
-package com.alpha.DLINK.domain.recommandHistory.domain;
+package com.alpha.DLINK.domain.recommendHistory.domain;
 
 import com.alpha.DLINK.domain.beverage.domain.Beverage;
 import com.alpha.DLINK.domain.member.entity.Member;
@@ -11,7 +11,7 @@ import lombok.Setter;
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RecommandHistory {
+public class RecommendHistory {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,7 +28,7 @@ public class RecommandHistory {
     private Boolean isLike;
 
     @Column(name = "similarity")
-    private Integer similarity;
+    private String similarity;
 
     private void setMember(Member member) {
         this.member = member;
@@ -39,13 +39,13 @@ public class RecommandHistory {
         this.beverage = beverage;
         beverage.getRecommandHistories().add(this);
     }
-    public static RecommandHistory create(Member member, Beverage beverage) {
-        RecommandHistory recommandHistory = new RecommandHistory();
-        recommandHistory.setSimilarity(0);
-        recommandHistory.setIsLike(false);
-        recommandHistory.setMember(member);
-        recommandHistory.setBeverage(beverage);
+    public static RecommendHistory create(Member member, Beverage beverage) {
+        RecommendHistory recommendHistory = new RecommendHistory();
+        recommendHistory.setSimilarity("0");
+        recommendHistory.setIsLike(false);
+        recommendHistory.setMember(member);
+        recommendHistory.setBeverage(beverage);
 
-        return recommandHistory;
+        return recommendHistory;
     }
 }

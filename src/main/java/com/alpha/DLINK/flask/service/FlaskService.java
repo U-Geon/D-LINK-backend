@@ -19,26 +19,35 @@ public class FlaskService {
 
     //데이터를 JSON 객체로 변환하기 위해서 사용
     private final ObjectMapper objectMapper;
+    private final RestTemplate restTemplate;
 
     @Transactional
-    public String sendToFlask(PromptRequest dto) throws JsonProcessingException {
-        RestTemplate restTemplate = new RestTemplate();
-
-        //헤더를 JSON으로 설정함
+    public String sendToFlask(PromptRequest dto) {
         HttpHeaders headers = new HttpHeaders();
-
-        //파라미터로 들어온 dto를 JSON 객체로 변환
         headers.setContentType(MediaType.APPLICATION_JSON);
+        String param;
 
-        String param = objectMapper.writeValueAsString(dto);
+        try {
+            param = objectMapper.writeValueAsString(dto);
+        } catch (JsonProcessingException e) {
+            // JSON 변환 실패 처리
+            throw new RuntimeException("JSON 변환에 실패했습니다.", e);
+        }
 
         HttpEntity<String> entity = new HttpEntity<>(param, headers);
+        String url = "http://10.223.125.219:8000/prediction";
 
-        //실제 Flask 서버랑 연결하기 위한 URL
-        String url = "http://10.30.119.172:8000/prediction";
-
-        //Flask 서버로 데이터를 전송하고 받은 응답 값을 return
-        ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
-        return response.getBody();
+        try {
+            ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return response.getBody();
+            } else {
+                // 적절한 에러 처리
+                throw new RuntimeException("Flask 서버 응답 오류: " + response.getStatusCode());
+            }
+        } catch (Exception e) {
+            // 네트워크 오류 등 처리
+            throw new RuntimeException("Flask 서버 요청 실패", e);
+        }
     }
 }
