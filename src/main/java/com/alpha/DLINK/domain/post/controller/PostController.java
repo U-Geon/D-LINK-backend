@@ -62,7 +62,7 @@ public class PostController {
         Post post = postService.findById(postId);
         List<File> files = post.getFiles();
         for (File file : files) {
-            s3FileService.deletePostImageFile(file.getUrl());
+            s3FileService.deletePostImageFile("post_image", file.getUrl());
         }
         postService.delete(post);
 

@@ -33,4 +33,11 @@ public class Beverage {
 
     @OneToMany(mappedBy = "beverage", cascade = CascadeType.ALL)
     private List<RecommendHistory> recommandHistories = new ArrayList<>();
+
+    public static Beverage create(String name, Cafe cafe) {
+        Beverage beverage = new Beverage();
+        beverage.setName(name);
+        beverage.setCafe(cafe);
+        return beverage;
+    }
 }

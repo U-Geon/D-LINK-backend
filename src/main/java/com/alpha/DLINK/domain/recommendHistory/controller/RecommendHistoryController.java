@@ -17,7 +17,6 @@ import java.util.List;
 public class RecommendHistoryController {
 
     private final RecommendHistoryService recommendHistoryService;
-    private final MemberService memberService;
 
     @GetMapping("/")
     public List<HistoryAndBeverageDto> history(@AuthenticationPrincipal Member member) {

@@ -29,9 +29,8 @@ public class MemberService {
 
     // 회원 정보 수정
     @Transactional
-    public Member update(Member member, String name) {
+    public void update(Member member, String name) {
         member.setNickname(name);
-        return member;
     }
 
     // 회원 탈퇴

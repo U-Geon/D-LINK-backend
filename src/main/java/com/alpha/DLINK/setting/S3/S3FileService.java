@@ -19,9 +19,9 @@ public class S3FileService {
     @Value("${s3.bucket}")
     private String bucket;
 
-    public void deletePostImageFile(String filename) {
+    public void deletePostImageFile(String dir, String filename) {
         try {
-            DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket, "post_image/" + filename);
+            DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket,  dir + "/" + filename);
             amazonS3.deleteObject(deleteObjectRequest);
 
             System.out.println("File deleted successfully.");
@@ -30,14 +30,14 @@ public class S3FileService {
         }
     }
 
-    public String createPostImageFile(MultipartFile file) throws IOException {
+    public String createPostImageFile(String dir, MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
-        String fileUrl = "https://" + bucket + "/post_image/" + fileName;
+        String fileUrl = "https://" + bucket + "/" + dir + "/" + fileName;
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());
         metadata.setContentLength(file.getSize());
 
-        amazonS3.putObject(bucket, "post_image/" + fileName, file.getInputStream(), metadata);
+        amazonS3.putObject(bucket, dir + "/" + fileName, file.getInputStream(), metadata);
 
         return fileUrl;
     }

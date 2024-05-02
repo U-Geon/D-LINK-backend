@@ -10,7 +10,6 @@ import com.alpha.DLINK.domain.post.dto.FindPostDto;
 import com.alpha.DLINK.domain.post.repository.PostRepository;
 import com.alpha.DLINK.setting.S3.S3FileService;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -25,12 +24,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PostService {
-
-    private final AmazonS3 amazonS3;
-
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
-
     private final PostRepository postRepository;
     private final LikeHistoryRepository likeHistoryRepository;
     private final S3FileService s3FileService;
@@ -47,7 +40,7 @@ public class PostService {
 
             for (MultipartFile file : files) {
                 String fileName = file.getOriginalFilename();
-                String fileUrl = s3FileService.createPostImageFile(file);
+                String fileUrl = s3FileService.createPostImageFile("post_image", file);
                 File.create(fileUrl, fileName, post);
             }
 

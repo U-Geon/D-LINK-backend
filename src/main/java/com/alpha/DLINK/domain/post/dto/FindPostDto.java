@@ -32,5 +32,4 @@ public class FindPostDto {
             this.url = file.getUrl();
         }
     }
-
 }
