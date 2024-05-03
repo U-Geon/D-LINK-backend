@@ -24,7 +24,7 @@ public class RecommendHistory {
     @JoinColumn(name = "beverage_id")
     private Beverage beverage;
 
-    @Column(name = "isLike")
+    @Column(name = "is_like")
     private Boolean isLike;
 
     @Column(name = "similarity")
@@ -32,12 +32,12 @@ public class RecommendHistory {
 
     private void setMember(Member member) {
         this.member = member;
-        member.getRecommandHistories().add(this);
+        member.getRecommendHistories().add(this);
     }
 
     private void setBeverage(Beverage beverage) {
         this.beverage = beverage;
-        beverage.getRecommandHistories().add(this);
+        beverage.getRecommendHistories().add(this);
     }
     public static RecommendHistory create(Member member, Beverage beverage) {
         RecommendHistory recommendHistory = new RecommendHistory();

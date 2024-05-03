@@ -15,6 +15,7 @@ import java.util.List;
 public class Beverage {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "beverage_id")
     private Long id;
 
     @Column(name = "name")
@@ -24,20 +25,24 @@ public class Beverage {
     @Embedded
     private Nutrition nutrition;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_id")
     private Cafe cafe;
 
     @Column(name = "photo")
     private String photo;
 
-    @OneToMany(mappedBy = "beverage", cascade = CascadeType.ALL)
-    private List<RecommendHistory> recommandHistories = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    private Type type;
 
-    public static Beverage create(String name, Cafe cafe) {
+    @OneToMany(mappedBy = "beverage", cascade = CascadeType.REMOVE)
+    private List<RecommendHistory> recommendHistories = new ArrayList<>();
+
+    public static Beverage create(String name, Cafe cafe, Nutrition nutrition) {
         Beverage beverage = new Beverage();
         beverage.setName(name);
         beverage.setCafe(cafe);
+        beverage.setNutrition(nutrition);
         return beverage;
     }
 }

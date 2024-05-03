@@ -56,15 +56,21 @@ public class PostController {
     }
 
     @DeleteMapping("/delete/{postId}")
-    public void deletePost(
-            @AuthenticationPrincipal Member member,
-            @PathVariable Long postId) {
+    public void deletePost(@PathVariable Long postId) {
         Post post = postService.findById(postId);
         List<File> files = post.getFiles();
         for (File file : files) {
             s3FileService.deletePostImageFile("post_image", file.getUrl());
         }
         postService.delete(post);
+    }
 
+    @PatchMapping("/update/{postId}")
+    public ResponseEntity<String> updatePost(@PathVariable Long postId, @RequestBody FindPostDto findPostDto) {
+        Post post = postService.findById(postId);
+        post.setTitle(findPostDto.getTitle());
+        post.setContent(findPostDto.getContent());
+
+        return ResponseEntity.ok().body("{\"msg\" : \"success\"}");
     }
 }

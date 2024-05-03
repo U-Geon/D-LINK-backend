@@ -22,20 +22,23 @@ public class BeverageService {
     private final BeverageRepository beverageRepository;
     private final S3FileService s3FileService;
 
+
     // 음료 데이터 생성
     public Beverage create(String name, Cafe cafe, Nutrition nutrition, MultipartFile file) throws IOException {
-        Beverage beverage = Beverage.create(name, cafe);
-        beverage.setNutrition(nutrition);
+        Beverage beverage = Beverage.create(name, cafe, nutrition);
         String url = s3FileService.createPostImageFile("beverage_image", file);
         beverage.setPhoto(url);
         beverageRepository.save(beverage);
         return beverage;
+    }
 
+    // 음료 데이터 저장
+    public void save(Beverage beverage) {
+        beverageRepository.save(beverage);
     }
 
     // 음료 조회
     public List<Beverage> findAll() {
         return beverageRepository.findAll();
     }
-
 }

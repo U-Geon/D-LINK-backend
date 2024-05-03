@@ -2,8 +2,6 @@ app:
   version: 1.0.1
 
 spring:
-  config:
-    import: classpath:application_secret.yml
   profiles:
     include: private
   security:
@@ -11,10 +9,10 @@ spring:
       client:
         registration:
           kakao:
-            client-id: ${kakao.client.id} # 앱키 -> REST API 키
-            client-secret: ${kakao.client.secret} # 카카오 로그인 -> 보안 -> Client Secret 코드
+            client-id: ${kakao.id} # 앱키 -> REST API 키
+            client-secret: ${kakao.secret} # 카카오 로그인 -> 보안 -> Client Secret 코드
             authorization-grant-type: authorization_code
-            redirect-uri: ${kakao.redirect-uri}
+            redirect-uri: ${kakao.redirect}
             client-authentication-method: client_secret_post # POST 사용 불가 (setRequestEntityConverter를 사용하여 POST를 지원하는 인스턴스를 제공해야 함.)
             scope:
               - account_email
@@ -62,15 +60,7 @@ springdoc:
   default-produces-media-type: application/json # response media type 의 기본 값
   paths-to-match: /api/** # 해당 패턴에 매칭되는 controller만 swagger-ui에 노출한다.
 
-kakao:
-  client:
-    id: bf112ec286fcdd432da901824631453f
-    secret: SwsFDoYP84xf3hXOCK8CcusqtB6nzE0p
-  redirect-uri: "http://localhost:8080/login/oauth2/code/kakao"
-
-
 jwt:
-  # 1Dawoon2HyeonJin3HanGyeol4Subin5Seungjoon6Geon를 Base64로 인코딩함.
   secret-key:  ${jwt.key}
   access-token:
     expiration: ${jwt.access-token-expiration} # 12시간

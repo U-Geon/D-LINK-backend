@@ -6,7 +6,6 @@ import lombok.*;
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class Cafe {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,4 +16,10 @@ public class Cafe {
     private String name;
     private String latitude;
     private String longitude;
+
+    public Cafe(String name, String latitude, String longitude) {
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }

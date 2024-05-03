@@ -31,4 +31,12 @@ public class RecommendHistoryService {
     public List<HistoryAndBeverageDto> findBeverageByMember(Long memberId) {
         return recommendHistoryRepository.findByMemberId(memberId).stream().map(HistoryAndBeverageDto::new).collect(Collectors.toList());
     }
+
+    public RecommendHistory recommend(Member member, Beverage beverage) {
+        RecommendHistory recommendHistory = RecommendHistory.create(member, beverage);
+        recommendHistoryRepository.save(recommendHistory);
+        return recommendHistory;
+    }
+
+
 }

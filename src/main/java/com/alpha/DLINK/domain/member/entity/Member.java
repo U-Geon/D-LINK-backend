@@ -34,7 +34,7 @@ public class Member implements UserDetails {
     private List<LikeHistory> likeHistories = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-    private List<RecommendHistory> recommandHistories = new ArrayList<>();
+    private List<RecommendHistory> recommendHistories = new ArrayList<>();
 
     public static Member create(String email) {
         Member member = new Member();
