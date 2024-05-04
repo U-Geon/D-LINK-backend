@@ -38,7 +38,7 @@ public class InitDB {
             Cafe cafe = new Cafe("스타벅스", "123", "123");
             em.persist(cafe);
 
-            Beverage beverage = Beverage.create("아메리카노", cafe, nutrition);
+            Beverage beverage = Beverage.create("아메리카노", cafe, nutrition, "coffee");
             em.persist(beverage);
         }
     }

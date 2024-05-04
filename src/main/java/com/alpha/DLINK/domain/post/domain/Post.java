@@ -4,7 +4,9 @@ package com.alpha.DLINK.domain.post.domain;
 import com.alpha.DLINK.domain.file.domain.File;
 import com.alpha.DLINK.domain.likeHistory.domain.LikeHistory;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
@@ -17,6 +19,7 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +36,7 @@ public class Post {
     private LocalDateTime createdAt;
 
     @Column(name = "likes")
-    private Integer likes;
+    private Long likes;
 
     // 지울 때 같이 삭제 & 생성할 때 같이 영속화하기!
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
@@ -46,7 +49,7 @@ public class Post {
         Post post = new Post();
         post.setTitle(title);
         post.setContent(content);
-        post.setLikes(0);
+        post.setLikes(0L);
         return post;
     }
 }

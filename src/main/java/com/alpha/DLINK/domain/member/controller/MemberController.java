@@ -26,7 +26,6 @@ public class MemberController {
     // oauth2 login 이후 생성된 OAuth2User 객체를 사용하기 위해 @AuthenticationPrincipal 사용!
     @PostMapping("/join")
     @Operation(summary = "회원 가입", description = "이메일, 닉네임 정보를 받아 회원가입 함")
-    @ApiResponse(responseCode = "200", description = "성공")
     public ResponseEntity<Object> signUp(@Parameter(required = true, description = "닉네임, 이메일 json") @RequestBody SignupDto signupDto) {
         Member member = memberService.findByEmail(signupDto.getEmail());
 

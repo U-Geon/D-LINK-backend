@@ -2,16 +2,13 @@ package com.alpha.DLINK.domain.post.service;
 
 
 import com.alpha.DLINK.domain.file.domain.File;
-import com.alpha.DLINK.domain.likeHistory.domain.LikeHistory;
 import com.alpha.DLINK.domain.likeHistory.repository.LikeHistoryRepository;
 import com.alpha.DLINK.domain.member.entity.Member;
 import com.alpha.DLINK.domain.post.domain.Post;
-import com.alpha.DLINK.domain.post.dto.FindPostDto;
+import com.alpha.DLINK.domain.post.dto.FindPostDTO;
 import com.alpha.DLINK.domain.post.repository.PostRepository;
 import com.alpha.DLINK.setting.S3.S3FileService;
-import com.amazonaws.services.s3.AmazonS3;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,9 +41,6 @@ public class PostService {
                 File.create(fileUrl, fileName, post);
             }
 
-            LikeHistory likeHistory = LikeHistory.create(member, post);
-
-            likeHistoryRepository.save(likeHistory);
             postRepository.save(post); // cascade에 의해 자동 영속화 됨.
         } catch (IOException e) {
             e.printStackTrace();
@@ -55,8 +49,8 @@ public class PostService {
 
     // 게시글 전체 조회
     // DTO 써서 post랑 file이랑 같이 조회!
-    public List<FindPostDto> findAll() {
-        return postRepository.findAll().stream().map(FindPostDto::new).collect(Collectors.toList());
+    public List<FindPostDTO> findAll() {
+        return postRepository.findAllByOrderByCreatedAtDesc().stream().map(FindPostDTO::new).collect(Collectors.toList());
     }
 
     public Post findById(Long id) {
@@ -74,6 +68,10 @@ public class PostService {
     // 게시글 삭제
     @Transactional
     public void delete(Post post) {
+        List<File> files = post.getFiles();
+        for (File file : files) {
+            s3FileService.deletePostImageFile("post_image", file.getUrl());
+        }
         postRepository.delete(post);
     }
 }

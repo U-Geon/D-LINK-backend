@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class BeverageService {
 
     private final BeverageRepository beverageRepository;
@@ -24,8 +24,8 @@ public class BeverageService {
 
 
     // 음료 데이터 생성
-    public Beverage create(String name, Cafe cafe, Nutrition nutrition, MultipartFile file) throws IOException {
-        Beverage beverage = Beverage.create(name, cafe, nutrition);
+    public Beverage create(String name, Cafe cafe, Nutrition nutrition, String type ,MultipartFile file) throws IOException {
+        Beverage beverage = Beverage.create(name, cafe, nutrition, type);
         String url = s3FileService.createPostImageFile("beverage_image", file);
         beverage.setPhoto(url);
         beverageRepository.save(beverage);

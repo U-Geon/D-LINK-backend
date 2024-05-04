@@ -19,15 +19,6 @@ public class RecommendHistoryService {
 
     private final RecommendHistoryRepository recommendHistoryRepository;
 
-    @Transactional
-    public RecommendHistory create(
-            Member member,
-            Beverage beverage) {
-        RecommendHistory recommendHistory = RecommendHistory.create(member, beverage);
-        recommendHistoryRepository.save(recommendHistory);
-        return recommendHistory;
-    }
-
     public List<HistoryAndBeverageDto> findBeverageByMember(Long memberId) {
         return recommendHistoryRepository.findByMemberId(memberId).stream().map(HistoryAndBeverageDto::new).collect(Collectors.toList());
     }
@@ -37,6 +28,4 @@ public class RecommendHistoryService {
         recommendHistoryRepository.save(recommendHistory);
         return recommendHistory;
     }
-
-
 }

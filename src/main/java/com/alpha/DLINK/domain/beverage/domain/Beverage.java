@@ -38,11 +38,14 @@ public class Beverage {
     @OneToMany(mappedBy = "beverage", cascade = CascadeType.REMOVE)
     private List<RecommendHistory> recommendHistories = new ArrayList<>();
 
-    public static Beverage create(String name, Cafe cafe, Nutrition nutrition) {
+    public static Beverage create(String name, Cafe cafe, Nutrition nutrition, String type) {
         Beverage beverage = new Beverage();
         beverage.setName(name);
         beverage.setCafe(cafe);
         beverage.setNutrition(nutrition);
+        if(type.equals("coffee")) beverage.setType(Type.COFFEE);
+        else if(type.equals("ade")) beverage.setType(Type.ADE);
+        else beverage.setType(Type.TEA);
         return beverage;
     }
 }

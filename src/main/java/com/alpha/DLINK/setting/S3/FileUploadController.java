@@ -1,4 +1,4 @@
-package com.alpha.DLINK.domain.post.controller;
+package com.alpha.DLINK.setting.S3;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
+/**
+ * s3 파일 업로드 예시
+ */
 
 @RestController
 @RequiredArgsConstructor

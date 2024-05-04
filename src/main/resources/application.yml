@@ -2,6 +2,10 @@ app:
   version: 1.0.1
 
 spring:
+  servlet:
+    multipart:
+      maxFileSize: 30MB # 파일 하나의 최대 크기
+      maxRequestSize: 100MB  # 한 번에 최대 업로드 가능 용량
   config:
     import: classpath:application-private.yml
   security:
@@ -25,8 +29,8 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${mysql.url}
-    username: ${mysql.username}
+    url: jdbc:mysql://127.0.0.1:3306/alpha?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&useUnicode=true
+    username: root
     password:
   jpa:
     database: mysql
@@ -59,3 +63,14 @@ springdoc:
   default-consumes-media-type: application/json # request media type 의 기본 값
   default-produces-media-type: application/json # response media type 의 기본 값
   paths-to-match: /api/** # 해당 패턴에 매칭되는 controller만 swagger-ui에 노출한다.
+
+cloud:
+  aws:
+    s3:
+      bucket: alpha-dlink
+    stack:
+      auto: false
+    region.static: ${s3.region}
+    credentials:
+      accessKey: ${s3.accessKey}
+      secretKey: ${s3.secretKey}

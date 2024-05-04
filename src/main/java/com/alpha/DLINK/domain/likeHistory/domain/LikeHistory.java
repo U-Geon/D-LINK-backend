@@ -3,6 +3,7 @@ package com.alpha.DLINK.domain.likeHistory.domain;
 import com.alpha.DLINK.domain.member.entity.Member;
 import com.alpha.DLINK.domain.post.domain.Post;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LikeHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,13 +29,6 @@ public class LikeHistory {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @Column(name = "is_like")
-    private Boolean isLike;
-
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
     private void setMember(Member member) {
         this.member = member;
         member.getLikeHistories().add(this);
@@ -47,7 +41,6 @@ public class LikeHistory {
 
     public static LikeHistory create(Member member, Post post) {
         LikeHistory likeHistory = new LikeHistory();
-        likeHistory.setIsLike(false);
         likeHistory.setMember(member);
         likeHistory.setPost(post);
         return likeHistory;
