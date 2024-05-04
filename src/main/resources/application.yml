@@ -2,8 +2,8 @@ app:
   version: 1.0.1
 
 spring:
-  profiles:
-    include: private
+  config:
+    import: classpath:application-private.yml
   security:
     oauth2:
       client:
@@ -59,20 +59,3 @@ springdoc:
   default-consumes-media-type: application/json # request media type 의 기본 값
   default-produces-media-type: application/json # response media type 의 기본 값
   paths-to-match: /api/** # 해당 패턴에 매칭되는 controller만 swagger-ui에 노출한다.
-
-jwt:
-  secret-key:  ${jwt.key}
-  access-token:
-    expiration: ${jwt.access-token-expiration} # 12시간
-  refresh-token:
-    expiration: ${jwt.refresh-token-expiration} # 14일
-
-cloud:
-  aws:
-    s3:
-      bucket: ${s3.bucket}
-    stack.auto: false
-    region.static: ap-northeast-2
-    credentials:
-      accessKey: ${s3.credentials.accessKey}
-      secretKey: ${s3.credentials.secretKey}

@@ -7,6 +7,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
@@ -29,6 +32,10 @@ public class RecommendHistory {
 
     @Column(name = "similarity")
     private String similarity;
+
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 
     private void setMember(Member member) {
         this.member = member;

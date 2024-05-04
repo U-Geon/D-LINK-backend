@@ -4,6 +4,9 @@ import com.alpha.DLINK.domain.member.service.MemberService;
 import com.alpha.DLINK.domain.member.dto.SignupDto;
 import com.alpha.DLINK.domain.member.entity.Member;
 import com.alpha.DLINK.setting.security.jwt.JwtProvider;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +25,9 @@ public class MemberController {
 
     // oauth2 login 이후 생성된 OAuth2User 객체를 사용하기 위해 @AuthenticationPrincipal 사용!
     @PostMapping("/join")
-    public ResponseEntity<Object> signUp(@RequestBody SignupDto signupDto) {
+    @Operation(summary = "회원 가입", description = "이메일, 닉네임 정보를 받아 회원가입 함")
+    @ApiResponse(responseCode = "200", description = "성공")
+    public ResponseEntity<Object> signUp(@Parameter(required = true, description = "닉네임, 이메일 json") @RequestBody SignupDto signupDto) {
         Member member = memberService.findByEmail(signupDto.getEmail());
 
         memberService.update(member, signupDto.getNickname());
