@@ -33,9 +33,6 @@ public class Member implements UserDetails {
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<LikeHistory> likeHistories = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-    private List<RecommendHistory> recommendHistories = new ArrayList<>();
-
     public static Member create(String email) {
         Member member = new Member();
         member.setEmail(email);

@@ -1,6 +1,9 @@
 app:
   version: 1.0.1
 
+server:
+  port: ${url.port}
+
 spring:
   servlet:
     multipart:
@@ -29,8 +32,8 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/alpha?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&useUnicode=true
-    username: root
+    url: ${mysql.url}
+    username: ${mysql.username}
     password:
   jpa:
     database: mysql
@@ -67,7 +70,7 @@ springdoc:
 cloud:
   aws:
     s3:
-      bucket: alpha-dlink
+      bucket: ${s3.bucket}
     stack:
       auto: false
     region.static: ${s3.region}

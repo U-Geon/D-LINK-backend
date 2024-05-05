@@ -39,15 +39,6 @@ public class RecommendHistory {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    private void setMember(Member member) {
-        this.member = member;
-        member.getRecommendHistories().add(this);
-    }
-
-    private void setBeverage(Beverage beverage) {
-        this.beverage = beverage;
-        beverage.getRecommendHistories().add(this);
-    }
     public static RecommendHistory create(Member member, Beverage beverage) {
         RecommendHistory recommendHistory = new RecommendHistory();
         recommendHistory.setSimilarity("0");
