@@ -35,9 +35,6 @@ public class Beverage {
     @Enumerated(EnumType.STRING)
     private Type type;
 
-    @OneToMany(mappedBy = "beverage", cascade = CascadeType.REMOVE)
-    private List<RecommendHistory> recommendHistories = new ArrayList<>();
-
     public static Beverage create(String name, Cafe cafe, Nutrition nutrition, String type) {
         Beverage beverage = new Beverage();
         beverage.setName(name);

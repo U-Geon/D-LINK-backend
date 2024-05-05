@@ -8,13 +8,13 @@ import lombok.Setter;
 
 @Getter @Setter
 @NoArgsConstructor
-public class HistoryAndBeverageDto {
+public class HistoryAndBeverageDTO {
 
     private Boolean isLike;
     private String similarity;
     private Beverage beverage;
 
-    public HistoryAndBeverageDto(RecommendHistory history) {
+    public HistoryAndBeverageDTO(RecommendHistory history) {
         this.isLike = history.getIsLike();
         this.similarity = history.getSimilarity();
         this.beverage = history.getBeverage();

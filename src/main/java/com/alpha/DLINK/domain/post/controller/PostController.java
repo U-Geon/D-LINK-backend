@@ -12,7 +12,6 @@ import com.alpha.DLINK.domain.post.service.PostService;
 import com.alpha.DLINK.setting.S3.S3FileService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +24,6 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/article")
-@Slf4j
 public class PostController {
     private final PostService postService;
     private final S3FileService s3FileService;
@@ -70,18 +68,24 @@ public class PostController {
 
     @DeleteMapping("/delete/{postId}")
     @Operation(summary = "게시글 삭제", description = "게시글 및 s3 버킷 사진 파일 삭제")
-    public void deletePost(@PathVariable Long postId) {
-        Post post = postService.findById(postId);
-        List<File> files = post.getFiles();
-        for (File file : files) {
-            s3FileService.deletePostImageFile("post_image", file.getUrl());
+    public ResponseEntity<String> deletePost(@PathVariable("postId") Long postId) {
+        try {
+            Post post = postService.findById(postId);
+            List<File> files = post.getFiles();
+            for (File file : files) {
+                s3FileService.deletePostImageFile("post_image", file.getName());
+            }
+            postService.delete(post);
+
+            return ResponseEntity.ok().body("{\"msg\" : \"삭제 완료\"}");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        postService.delete(post);
     }
 
     @PatchMapping("/update/{postId}")
     @Operation(summary = "게시글 수정", description = "제목 및 내용 수정하기")
-    public ResponseEntity<String> updatePost(@PathVariable Long postId, @RequestBody FindPostDTO findPostDto) {
+    public ResponseEntity<String> updatePost(@PathVariable("postId") Long postId, @RequestBody FindPostDTO findPostDto) {
         Post post = postService.findById(postId);
         postService.update(post, findPostDto.getTitle(), findPostDto.getContent());
 
