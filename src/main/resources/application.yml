@@ -1,9 +1,6 @@
 app:
   version: 1.0.1
 
-server:
-  port: ${url.port}
-
 spring:
   servlet:
     multipart:
@@ -34,7 +31,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${mysql.url}
     username: ${mysql.username}
-    password:
+    password: ${mysql.password}
   jpa:
     database: mysql
     hibernate:
