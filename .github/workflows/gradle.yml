@@ -42,13 +42,6 @@ jobs:
         # GitHub-Actions 에서 설정한 값을 application-private.yml 파일에 쓰기
         echo "${{ secrets.APPLICATION_YML }}" >> ./application-database.yaml
       shell: bash
-    
-    - name: Setup MySQL
-      uses: mirromutth/mysql-action@v1.1
-      with:
-        mysql database: 'alpha' 
-        mysql user: 'fbrjs'
-        mysql password: ${{ secrets.MYSQL_PASSWORD }}
 
     - name: Run chmod to make gradlew executable
       run: chmod +x ./gradlew
