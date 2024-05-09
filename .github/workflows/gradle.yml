@@ -34,9 +34,14 @@ jobs:
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
     - name: Set application-private.yml file
-      run: |
-        echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application-private.yml
-        find src
+      run: |  
+        # application-private.yml 파일 생성
+        cd ./src/main/resources
+        touch ./application-private.yml
+
+        # GitHub-Actions 에서 설정한 값을 application-private.yml 파일에 쓰기
+        echo "${{ secrets.APPLICATION_YML }}" >> ./application-database.yaml
+      shell: bash
 
     - name: Run chmod to make gradlew executable
       run: chmod +x ./gradlew
