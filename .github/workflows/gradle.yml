@@ -44,7 +44,7 @@ jobs:
       shell: bash
     
     - name: Setup MySQL
-    - uses: mirromutth/mysql-action@v1.1
+      uses: mirromutth/mysql-action@v1.1
       with:
         mysql database: 'alpha' 
         mysql user: 'fbrjs'
