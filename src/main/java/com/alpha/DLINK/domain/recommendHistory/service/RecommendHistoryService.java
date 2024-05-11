@@ -1,7 +1,9 @@
 package com.alpha.DLINK.domain.recommendHistory.service;
 
 import com.alpha.DLINK.domain.beverage.domain.Beverage;
+import com.alpha.DLINK.domain.beverage.repository.BeverageRepository;
 import com.alpha.DLINK.domain.member.entity.Member;
+import com.alpha.DLINK.domain.member.repository.MemberRepository;
 import com.alpha.DLINK.domain.recommendHistory.domain.RecommendHistory;
 import com.alpha.DLINK.domain.recommendHistory.dto.HistoryAndBeverageDTO;
 import com.alpha.DLINK.domain.recommendHistory.repository.RecommendHistoryRepository;
@@ -17,6 +19,8 @@ import java.util.stream.Collectors;
 @Transactional
 public class RecommendHistoryService {
 
+    private final MemberRepository memberRepository;
+    private final BeverageRepository beverageRepository;
     private final RecommendHistoryRepository recommendHistoryRepository;
 
     @Transactional(readOnly = true)
@@ -25,9 +29,11 @@ public class RecommendHistoryService {
     }
 
     // 이걸로 할래요!
-    public RecommendHistory recommend(Member member, Beverage beverage) {
+    public void recommend(Long memberId, Long beverageId) {
+        Member member = memberRepository.findById(memberId).orElse(null);
+        Beverage beverage = beverageRepository.findById(beverageId).orElse(null);
         RecommendHistory recommendHistory = RecommendHistory.create(member, beverage);
+
         recommendHistoryRepository.save(recommendHistory);
-        return recommendHistory;
     }
 }
