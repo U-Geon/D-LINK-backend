@@ -39,7 +39,7 @@ jobs:
     - name: Build with Gradle
       run: |
           chmod +x ./gradlew
-          ./gradlew clean build -x test
+          ./gradlew clean build
   
   # 의존성 그래프 테스트
   dependency-submission:
