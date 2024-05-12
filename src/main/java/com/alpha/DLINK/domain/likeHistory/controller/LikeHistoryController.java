@@ -5,6 +5,7 @@ import com.alpha.DLINK.domain.likeHistory.dto.LikeRequestDto;
 import com.alpha.DLINK.domain.likeHistory.service.LikeHistoryService;
 import com.alpha.DLINK.domain.member.entity.Member;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,8 @@ public class LikeHistoryController {
 
     @PostMapping("/like")
     @Operation(summary = "게시글 좋아요 기능", description = "body 부분에 담긴 postId를 받아 해당 게시글 좋아요 기능 구현")
-    public ResponseEntity<String> clickHeart(@RequestBody @Valid LikeRequestDto likeRequestDto,
+    public ResponseEntity<String> clickHeart(@Parameter(required = true, description = "게시글 아이디")
+                                                 @RequestBody @Valid LikeRequestDto likeRequestDto,
                                             @AuthenticationPrincipal Member member) {
         try {
             likeHistoryService.setLike(member.getId(), likeRequestDto.getPostId());

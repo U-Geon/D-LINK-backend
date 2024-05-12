@@ -11,6 +11,8 @@ import com.alpha.DLINK.domain.post.dto.PostDetailDTO;
 import com.alpha.DLINK.domain.post.service.PostService;
 import com.alpha.DLINK.setting.S3.S3FileService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -84,8 +86,9 @@ public class PostController {
     }
 
     @PatchMapping("/update/{postId}")
-    @Operation(summary = "게시글 수정", description = "제목 및 내용 수정하기")
-    public ResponseEntity<String> updatePost(@PathVariable("postId") Long postId, @RequestBody FindPostDTO findPostDto) {
+    @Operation(summary = "게시글 수정", description = "제목 및 내용 수정하기, 일단 사진은 x -> 로직 수정해야 함")
+    public ResponseEntity<String> updatePost(@PathVariable("postId") Long postId,
+                                             @RequestBody @Valid FindPostDTO findPostDto) {
         Post post = postService.findById(postId);
         postService.update(post, findPostDto.getTitle(), findPostDto.getContent());
 

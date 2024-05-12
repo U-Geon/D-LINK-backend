@@ -6,9 +6,8 @@ import com.alpha.DLINK.domain.member.entity.Member;
 import com.alpha.DLINK.setting.security.jwt.JwtProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +15,6 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 @RequestMapping("/api/auth")
 public class MemberController {
 
@@ -26,15 +24,20 @@ public class MemberController {
     // oauth2 login 이후 생성된 OAuth2User 객체를 사용하기 위해 @AuthenticationPrincipal 사용!
     @PostMapping("/join")
     @Operation(summary = "회원 가입", description = "이메일, 닉네임 정보를 받아 회원가입 함")
-    public ResponseEntity<Object> signUp(@Parameter(required = true, description = "닉네임, 이메일 json") @RequestBody SignupDto signupDto) {
-        Member member = memberService.findByEmail(signupDto.getEmail());
+    public ResponseEntity<Object> signUp(@Parameter(required = true, description = "닉네임, 이메일")
+                                             @RequestBody @Valid SignupDto signupDto) {
+        try {
+            Member member = memberService.findByEmail(signupDto.getEmail());
 
-        memberService.update(member, signupDto.getNickname());
+            memberService.update(member, signupDto.getNickname());
 
-        String accessToken = jwtProvider.generateAccessTokenByNickname(signupDto.getNickname()); // 토큰 생성
+            String accessToken = jwtProvider.generateAccessTokenByNickname(signupDto.getNickname()); // 토큰 생성
 
-        return ResponseEntity.ok()
-                .header(AUTHORIZATION, "Bearer " + accessToken)
-                .body("{\"msg\" : \"success\"}");
+            return ResponseEntity.ok()
+                    .header(AUTHORIZATION, "Bearer " + accessToken)
+                    .body("{\"msg\" : \"success\"}");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
