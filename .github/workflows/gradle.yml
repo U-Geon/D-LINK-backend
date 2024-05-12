@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: CI / CD
 
 on:
   push:
@@ -40,7 +40,14 @@ jobs:
       run: |
           chmod +x ./gradlew
           ./gradlew clean build
-  
+
+    # { username/repository } 로 빌드 & . 이 의미하는 것은 Dockerfile의 경로를 의미함.
+    - name: Docker build & push to docker repo
+      run: |
+        docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+        docker build -t ${{ secrets.DOCKER_USER }}/alpha_dlink . 
+        docker push ${{ secrets.DOCKER_REPO }}/alpha_dlink
+
   # 의존성 그래프 테스트
   dependency-submission:
 
