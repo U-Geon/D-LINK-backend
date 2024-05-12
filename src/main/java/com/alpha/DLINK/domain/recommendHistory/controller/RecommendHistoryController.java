@@ -30,7 +30,7 @@ public class RecommendHistoryController {
     }
 
     @PostMapping("/recommend")
-    @Operation(summary = "사용자 추천", description = "이걸로 할래요 누르기")
+    @Operation(summary = "이걸로 할래요 클릭", description = "이걸로 할래요 누를 시 추천 히스토리에 데이터 생성")
     public ResponseEntity<String> pick(@AuthenticationPrincipal Member member,
                                        @RequestBody @Valid PickRequestDTO pickRequestDTO) {
         recommendHistoryService.recommend(member.getId(), pickRequestDTO.getBeverageId());
