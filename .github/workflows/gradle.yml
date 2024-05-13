@@ -48,3 +48,15 @@ jobs:
         docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker build -t ${{ secrets.DOCKER_USER }}/alpha_dlink . 
         docker push ${{ secrets.DOCKER_USER }}/alpha_dlink
+
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
+      with:
+        key: ${{ secrets.EC2_PRIVATE_KEY }} # pem key
+        host: ${{ secrets.EC2_HOST }} # ec2 ip
+        username: ${{ secrets.EC2_USER }} # ec2에서 whoami 명령어로 확인
+        script: |
+          sudo docker stop ryu7844/alpha_dlink
+          sudo docker system prune -f
+          sudo docker pull ryu7844/alpha_dlink
+          sudo docker run -d --rm -p 8080:8080 ryu7844/alpha_dlink

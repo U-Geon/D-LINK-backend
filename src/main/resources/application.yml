@@ -35,7 +35,7 @@ spring:
   jpa:
     database: mysql
     hibernate:
-      ddl-auto: update # create none update
+      ddl-auto: create # create none update
     properties:
       hibernate:
         format_sql: true
