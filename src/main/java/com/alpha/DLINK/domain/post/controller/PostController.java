@@ -29,7 +29,6 @@ import java.util.Optional;
 public class PostController {
     private final PostService postService;
     private final S3FileService s3FileService;
-    private final MemberService memberService;
     private final LikeHistoryService likeHistoryService;
 
     @GetMapping
@@ -58,8 +57,7 @@ public class PostController {
                                              @RequestParam("title") String title,
                                              @RequestParam("content") String content) {
         try {
-            Member findMember = memberService.findByEmail(member.getEmail());
-            postService.create(title, content, findMember, files);
+            postService.create(title, content, files);
 
             return ResponseEntity.ok().body("{\"msg\" : \"success\"}");
         } catch (Exception e) {

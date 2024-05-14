@@ -3,7 +3,6 @@ package com.alpha.DLINK.domain.post.service;
 
 import com.alpha.DLINK.domain.file.domain.File;
 import com.alpha.DLINK.domain.likeHistory.repository.LikeHistoryRepository;
-import com.alpha.DLINK.domain.member.entity.Member;
 import com.alpha.DLINK.domain.post.domain.Post;
 import com.alpha.DLINK.domain.post.dto.FindPostDTO;
 import com.alpha.DLINK.domain.post.repository.PostRepository;
@@ -29,7 +28,6 @@ public class PostService {
     @Transactional
     public void create(String title,
                        String content,
-                       Member member,
                        List<MultipartFile> files) {
 
         try {
@@ -53,6 +51,7 @@ public class PostService {
         return postRepository.findAllByOrderByCreatedAtDesc().stream().map(FindPostDTO::new).collect(Collectors.toList());
     }
 
+    // 게시글 아이디로 찾기
     public Post findById(Long id) {
         return postRepository.findById(id).orElse(null);
     }
