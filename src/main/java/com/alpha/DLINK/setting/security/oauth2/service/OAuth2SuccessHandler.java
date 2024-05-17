@@ -52,7 +52,8 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                         .queryParam("sign_up", true)
                         .build()
                         .toUriString();
-                addJwtToCookie(authentication, response);
+                String accessToken = jwtProvider.generateAccessToken(authentication);
+                response.addHeader("Authorization", "Bearer " + accessToken);
                 response.sendRedirect(redirectionUri);
 
             }
@@ -67,18 +68,6 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         Cookie cookie = new Cookie(COOKIE_NAME, email);
         cookie.setMaxAge(3600);
         cookie.setPath("/");
-        response.addCookie(cookie);
-    }
-
-    // 쿠키에 JWT를 담아줍니다.
-    private void addJwtToCookie(Authentication authentication, HttpServletResponse response) {
-        final String COOKIE_NAME = "token";
-        String accessToken = jwtProvider.generateAccessToken(authentication);
-
-        Cookie cookie = new Cookie(COOKIE_NAME, accessToken);
-        cookie.setMaxAge(3600);  // 테스트 후 더 짧게 유지할 계획입니다.
-        cookie.setPath("/");
-
         response.addCookie(cookie);
     }
 }

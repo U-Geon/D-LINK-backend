@@ -25,7 +25,7 @@ public class LikeHistoryController {
                                                  @RequestBody @Valid LikeRequestDto likeRequestDto,
                                             @AuthenticationPrincipal Member member) {
         try {
-            likeHistoryService.setLike(member.getId(), likeRequestDto.getPostId());
+            likeHistoryService.setLike(member.getId(), likeRequestDto.getArticleId());
             return ResponseEntity.ok().body("{\"msg\" : \"success\"}");
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -8,5 +8,5 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LikeRequestDto {
-    private Long postId;
+    private Long articleId;
 }
