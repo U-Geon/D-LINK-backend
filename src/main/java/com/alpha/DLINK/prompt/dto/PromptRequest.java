@@ -1,4 +1,4 @@
-package com.alpha.DLINK.flask.dto;
+package com.alpha.DLINK.prompt.dto;
 
 import lombok.*;
 

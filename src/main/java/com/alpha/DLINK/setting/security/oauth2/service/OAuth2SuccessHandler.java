@@ -4,6 +4,7 @@ import com.alpha.DLINK.domain.member.entity.Member;
 import com.alpha.DLINK.setting.security.jwt.JwtProvider;
 import com.alpha.DLINK.setting.security.oauth2.CustomOauth2User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -40,39 +42,49 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             log.info("member : {} {} ", member.getId(), member.getNickname()); // 수정된 부분
 
             if (member.getNickname() == null) {
-                // JSON 형태로 변환하여 response body에 쓰기 -> tokenfilter에서 이미 null처리가 되어버림.
-                Map<String, String> responseBody = new HashMap<>();
-                responseBody.put("email", member.getEmail());
-                responseBody.put("msg", "회원 가입 필요");
-
-                response.setStatus(HttpStatus.OK.value());
-                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
-                ObjectMapper objectMapper = new ObjectMapper();
-                objectMapper.writeValue(response.getWriter(), responseBody);
+                String redirectionUri = UriComponentsBuilder.fromUriString("http://localhost:3000/login/callback")
+                        .queryParam("sign_up", false)
+                        .build()
+                        .toUriString();
+                addEmailToCookie(member.getEmail(), response);
+                response.sendRedirect(redirectionUri);
 
             } else {
                 // refresh token을 저장해야 하는데 redis 사용 안하고 그냥
 //                String refreshToken = jwtProvider.createRefreshToken(member.getEmail());
 //                jwtService.save(new RefreshToken(refreshToken, member.getId()));
 
-                // jwt 토큰 생성 후 헤더에 담아주기.
-                String accessToken = jwtProvider.generateAccessToken(authentication);
-                response.addHeader("Authorization", "Bearer " + accessToken);
+                String redirectionUri = UriComponentsBuilder.fromUriString("http://localhost:3000/login/callback")
+                        .queryParam("sign_up", true)
+                        .build()
+                        .toUriString();
+                addJwtToCookie(authentication, response);
+                response.sendRedirect(redirectionUri);
 
-                // 응답 본문에 메시지 추가
-                response.setStatus(HttpStatus.OK.value());
-                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
-                Map<String, String> responseBody = new HashMap<>();
-
-                responseBody.put("msg", "로그인 성공");
-                ObjectMapper objectMapper = new ObjectMapper();
-                objectMapper.writeValue(response.getWriter(), responseBody);
             }
         } else {
             // OAuth2User가 아닌 경우
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
+    }
+
+    private void addEmailToCookie(String email, HttpServletResponse response) {
+        final String COOKIE_NAME = "email";
+        Cookie cookie = new Cookie(COOKIE_NAME, email);
+        cookie.setMaxAge(3600);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+    }
+
+    // 쿠키에 JWT를 담아줍니다.
+    private void addJwtToCookie(Authentication authentication, HttpServletResponse response) {
+        final String COOKIE_NAME = "token";
+        String accessToken = jwtProvider.generateAccessToken(authentication);
+
+        Cookie cookie = new Cookie(COOKIE_NAME, accessToken);
+        cookie.setMaxAge(3600);  // 테스트 후 더 짧게 유지할 계획입니다.
+        cookie.setPath("/");
+
+        response.addCookie(cookie);
     }
 }
