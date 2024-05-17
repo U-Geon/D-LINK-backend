@@ -56,7 +56,7 @@ jobs:
         host: ${{ secrets.EC2_HOST }} # ec2 ip
         username: ${{ secrets.EC2_USER }} # ec2에서 whoami 명령어로 확인
         script: |
-          sudo docker stop ryu7844/alpha_dlink
+          sudo docker stop $(sudo docker ps -q)
           sudo docker system prune -f
           sudo docker pull ryu7844/alpha_dlink
           sudo docker run -d --rm -p 8080:8080 ryu7844/alpha_dlink
