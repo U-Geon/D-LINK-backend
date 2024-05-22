@@ -4,6 +4,7 @@
 - 개요 : 대규모 언어 모델을 활용한 사용자 맞춤 음료 추천 플랫폼
 
 # Tools
+- **FrameWork** : Spring Boot
 - **DB** : MySQL
 - **API Specification** : Swagger-ui
 - **Cloud**
