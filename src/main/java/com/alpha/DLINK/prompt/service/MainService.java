@@ -2,6 +2,7 @@ package com.alpha.DLINK.prompt.service;
 
 
 import com.alpha.DLINK.domain.cafe.repository.CafeRepository;
+import com.alpha.DLINK.prompt.dto.ModelServerToWebServerDTO;
 import com.alpha.DLINK.prompt.dto.PromptRequestDTO;
 import com.alpha.DLINK.prompt.dto.PromptResponseDTO;
 import com.alpha.DLINK.prompt.dto.QueryResponseDTO;
@@ -28,19 +29,21 @@ public class MainService {
     private final CafeRepository cafeRepository;
 
     @Transactional(readOnly = true)
-    public Mono<PromptResponseDTO> sendToModelServer(PromptRequestDTO request) {
+    public Mono<List<ModelServerToWebServerDTO>> sendToModelServer(PromptRequestDTO request) {
 
         PromptResponseDTO promptResponseDTO = findBeverageIdAndDocument(request);
 
         WebClient webClient = webClientBuilder.baseUrl(baseUrl).build();
 
-        Mono<PromptResponseDTO> promptResponseMono = webClient.post()
+        Mono<List<ModelServerToWebServerDTO>> listMono = webClient.post()
                 .uri("/prediction")
                 .bodyValue(promptResponseDTO)
                 .retrieve()
-                .bodyToMono(PromptResponseDTO.class);
+                .bodyToFlux(ModelServerToWebServerDTO.class)
+                .collectList();
 
-        return promptResponseMono;
+
+        return listMono;
     }
 
     // 클라이언트에서 받은 request를 통해 query 호출 후 음료 id와 매핑되는 document 리스트 호출.

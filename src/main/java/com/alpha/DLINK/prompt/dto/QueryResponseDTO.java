@@ -6,11 +6,11 @@ import lombok.Setter;
 
 @Getter @Setter
 public class QueryResponseDTO {
-    private Long beverageId;
+    private String id;
     private String document;
 
     public QueryResponseDTO(Object[] result) {
-        this.beverageId = (Long) result[0];
-        this.document = (String) result[1];
+        this.id = result[0].toString();
+        this.document = result[1].toString();
     }
 }
