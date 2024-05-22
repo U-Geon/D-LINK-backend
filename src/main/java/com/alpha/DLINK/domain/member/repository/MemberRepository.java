@@ -1,6 +1,6 @@
 package com.alpha.DLINK.domain.member.repository;
 
-import com.alpha.DLINK.domain.member.entity.Member;
+import com.alpha.DLINK.domain.member.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

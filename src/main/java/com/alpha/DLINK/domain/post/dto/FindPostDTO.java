@@ -14,13 +14,11 @@ public class FindPostDTO {
     private String title;
     private String content;
     private List<FileDto> files;
-    private Long likes;
 
     public FindPostDTO(Post post) {
         this.title = post.getTitle();
         this.content = post.getContent();
         this.files = post.getFiles().stream().map(FileDto::new).collect(Collectors.toList());
-        this.likes = post.getLikes();
     }
 
     @Data

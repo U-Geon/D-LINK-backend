@@ -1,7 +1,11 @@
 package com.alpha.DLINK.domain.cafe.domain;
 
+import com.alpha.DLINK.domain.beverage.domain.Beverage;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter

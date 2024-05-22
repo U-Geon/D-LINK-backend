@@ -1,9 +1,9 @@
 package com.alpha.DLINK.domain.likeHistory.controller;
 
 
-import com.alpha.DLINK.domain.likeHistory.dto.LikeRequestDto;
+import com.alpha.DLINK.domain.likeHistory.dto.PostLikeRequestDto;
 import com.alpha.DLINK.domain.likeHistory.service.LikeHistoryService;
-import com.alpha.DLINK.domain.member.entity.Member;
+import com.alpha.DLINK.domain.member.domain.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
@@ -22,10 +22,10 @@ public class LikeHistoryController {
     @PostMapping("/like")
     @Operation(summary = "게시글 좋아요 기능", description = "body 부분에 담긴 postId를 받아 해당 게시글 좋아요 기능 구현")
     public ResponseEntity<String> clickHeart(@Parameter(required = true, description = "게시글 아이디")
-                                                 @RequestBody @Valid LikeRequestDto likeRequestDto,
+                                                 @RequestBody @Valid PostLikeRequestDto postLikeRequestDto,
                                             @AuthenticationPrincipal Member member) {
         try {
-            likeHistoryService.setLike(member.getId(), likeRequestDto.getArticleId());
+            likeHistoryService.setLike(member.getId(), postLikeRequestDto.getPostId());
             return ResponseEntity.ok().body("{\"msg\" : \"success\"}");
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -1,7 +1,7 @@
 package com.alpha.DLINK.domain.likeHistory.repository;
 
 import com.alpha.DLINK.domain.likeHistory.domain.LikeHistory;
-import com.alpha.DLINK.domain.member.entity.Member;
+import com.alpha.DLINK.domain.member.domain.Member;
 import com.alpha.DLINK.domain.post.domain.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 

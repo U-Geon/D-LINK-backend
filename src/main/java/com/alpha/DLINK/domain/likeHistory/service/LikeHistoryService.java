@@ -3,7 +3,7 @@ package com.alpha.DLINK.domain.likeHistory.service;
 
 import com.alpha.DLINK.domain.likeHistory.domain.LikeHistory;
 import com.alpha.DLINK.domain.likeHistory.repository.LikeHistoryRepository;
-import com.alpha.DLINK.domain.member.entity.Member;
+import com.alpha.DLINK.domain.member.domain.Member;
 import com.alpha.DLINK.domain.member.repository.MemberRepository;
 import com.alpha.DLINK.domain.post.domain.Post;
 import com.alpha.DLINK.domain.post.repository.PostRepository;
@@ -29,7 +29,7 @@ public class LikeHistoryService {
         return likeHistoryRepository.findByMemberAndPost(member, post);
     }
 
-    public boolean setLike(Long memberId, Long postId) throws Exception {
+    public void setLike(Long memberId, Long postId) throws Exception {
         Member member = memberRepository.findById(memberId).orElseThrow(Exception::new);
         Post post = postRepository.findById(postId).orElseThrow(Exception::new);
 
@@ -44,6 +44,5 @@ public class LikeHistoryService {
             if(likes >= 0) post.setLikes(likes - 1);
             likeHistoryRepository.delete(isPresent);
         }
-        return isPresent == null;
     }
 }

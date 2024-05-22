@@ -10,14 +10,14 @@ import java.time.LocalDateTime;
 
 @Getter @Setter
 @NoArgsConstructor
-public class HistoryAndBeverageDTO {
+public class findRecommendHistoryResponseDTO {
 
     private Boolean isLike;
     private String similarity;
     private LocalDateTime createdAt;
     private Beverage beverage;
 
-    public HistoryAndBeverageDTO(RecommendHistory history) {
+    public findRecommendHistoryResponseDTO(RecommendHistory history) {
         this.isLike = history.getIsLike();
         this.createdAt = history.getCreatedAt();
         this.similarity = history.getSimilarity();

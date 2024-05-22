@@ -3,15 +3,13 @@ package com.alpha.DLINK.domain.post.controller;
 import com.alpha.DLINK.domain.file.domain.File;
 import com.alpha.DLINK.domain.likeHistory.domain.LikeHistory;
 import com.alpha.DLINK.domain.likeHistory.service.LikeHistoryService;
-import com.alpha.DLINK.domain.member.entity.Member;
-import com.alpha.DLINK.domain.member.service.MemberService;
+import com.alpha.DLINK.domain.member.domain.Member;
 import com.alpha.DLINK.domain.post.domain.Post;
 import com.alpha.DLINK.domain.post.dto.FindPostDTO;
 import com.alpha.DLINK.domain.post.dto.PostDetailDTO;
 import com.alpha.DLINK.domain.post.service.PostService;
 import com.alpha.DLINK.setting.S3.S3FileService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -44,20 +42,18 @@ public class PostController {
                                   @PathVariable("postId") Long postId) throws Exception {
         Post post = postService.findById(postId);
         Optional<LikeHistory> history = likeHistoryService.findHistory(member.getId(), postId);
-        if(history.isPresent()) {
-            return new PostDetailDTO(post, true);
-        }
+        if(history.isPresent()) return new PostDetailDTO(post, true);
         return new PostDetailDTO(post, false);
     }
 
     @PostMapping("/create")
     @Operation(summary = "게시글 생성", description = "formData에 제목, 내용, multipart file 데이터 담아서 전송하기.")
-    public ResponseEntity<String> createPost(@AuthenticationPrincipal Member member,
-                                             @RequestParam("files") List<MultipartFile> files,
+    public ResponseEntity<String> createPost(@RequestParam("files") List<MultipartFile> files,
                                              @RequestParam("title") String title,
-                                             @RequestParam("content") String content) {
+                                             @RequestParam("content") String content,
+                                             @AuthenticationPrincipal Member member) {
         try {
-            postService.create(title, content, files);
+            postService.create(title, content, files, member.getNickname());
 
             return ResponseEntity.ok().body("{\"msg\" : \"success\"}");
         } catch (Exception e) {

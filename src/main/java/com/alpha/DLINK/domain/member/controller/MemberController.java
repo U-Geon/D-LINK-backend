@@ -2,7 +2,7 @@ package com.alpha.DLINK.domain.member.controller;
 
 import com.alpha.DLINK.domain.member.service.MemberService;
 import com.alpha.DLINK.domain.member.dto.SignupDto;
-import com.alpha.DLINK.domain.member.entity.Member;
+import com.alpha.DLINK.domain.member.domain.Member;
 import com.alpha.DLINK.setting.security.jwt.JwtProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

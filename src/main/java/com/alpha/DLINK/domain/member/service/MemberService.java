@@ -1,7 +1,7 @@
 package com.alpha.DLINK.domain.member.service;
 
 
-import com.alpha.DLINK.domain.member.entity.Member;
+import com.alpha.DLINK.domain.member.domain.Member;
 import com.alpha.DLINK.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,11 +17,6 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    // 전체 회원 조회
-    public List<Member> findAll() {
-        return memberRepository.findAll();
-    }
-
     // 이메일 기준 회원 조회
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email).orElse(null);
@@ -31,15 +26,5 @@ public class MemberService {
     @Transactional
     public void update(Member member, String name) {
         member.setNickname(name);
-    }
-
-    // 회원 탈퇴
-    @Transactional
-    public void delete(Long id) {
-        Optional<Member> find = memberRepository.findById(id);
-        if(find.isPresent()) {
-            Member member = find.get();
-            memberRepository.delete(member);
-        }
     }
 }

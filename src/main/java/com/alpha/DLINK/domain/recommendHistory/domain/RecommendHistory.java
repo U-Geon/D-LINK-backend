@@ -1,7 +1,7 @@
 package com.alpha.DLINK.domain.recommendHistory.domain;
 
 import com.alpha.DLINK.domain.beverage.domain.Beverage;
-import com.alpha.DLINK.domain.member.entity.Member;
+import com.alpha.DLINK.domain.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 public class RecommendHistory {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false, name = "recommend_history_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,6 +33,9 @@ public class RecommendHistory {
     @Column(name = "is_like")
     private Boolean isLike;
 
+    @Column(name = "is_recommended")
+    private Boolean isRecommended;
+
     @Column(name = "similarity")
     private String similarity;
 
@@ -43,6 +47,7 @@ public class RecommendHistory {
         RecommendHistory recommendHistory = new RecommendHistory();
         recommendHistory.setSimilarity("0");
         recommendHistory.setIsLike(false);
+        recommendHistory.setIsRecommended(false);
         recommendHistory.setMember(member);
         recommendHistory.setBeverage(beverage);
 

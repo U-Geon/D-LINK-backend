@@ -21,17 +21,17 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class PostService {
     private final PostRepository postRepository;
-    private final LikeHistoryRepository likeHistoryRepository;
     private final S3FileService s3FileService;
 
     // 게시글 생성 로직
     @Transactional
     public void create(String title,
                        String content,
-                       List<MultipartFile> files) {
+                       List<MultipartFile> files,
+                       String nickname) {
 
         try {
-            Post post = Post.create(title, content);
+            Post post = Post.create(title, content, nickname);
 
             for (MultipartFile file : files) {
                 String fileName = file.getOriginalFilename();

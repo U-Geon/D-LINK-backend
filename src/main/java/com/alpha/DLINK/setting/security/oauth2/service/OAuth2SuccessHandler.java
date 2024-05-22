@@ -1,9 +1,8 @@
 package com.alpha.DLINK.setting.security.oauth2.service;
 
-import com.alpha.DLINK.domain.member.entity.Member;
+import com.alpha.DLINK.domain.member.domain.Member;
 import com.alpha.DLINK.setting.security.jwt.JwtProvider;
 import com.alpha.DLINK.setting.security.oauth2.CustomOauth2User;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -37,10 +36,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
             if (member.getNickname() == null) {
                 String redirectionUri = UriComponentsBuilder.fromUriString("http://localhost:3000/login/callback")
-                        .queryParam("sign_up", false)
+                        .queryParam("email", member.getEmail())
                         .build()
                         .toUriString();
-                addEmailToCookie(member.getEmail(), response);
                 response.sendRedirect(redirectionUri);
 
             } else {
@@ -48,26 +46,16 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 //                String refreshToken = jwtProvider.createRefreshToken(member.getEmail());
 //                jwtService.save(new RefreshToken(refreshToken, member.getId()));
 
+                String accessToken = jwtProvider.generateAccessToken(authentication);
                 String redirectionUri = UriComponentsBuilder.fromUriString("http://localhost:3000/login/callback")
-                        .queryParam("sign_up", true)
+                        .queryParam("token", accessToken)
                         .build()
                         .toUriString();
-                String accessToken = jwtProvider.generateAccessToken(authentication);
-                response.addHeader("Authorization", "Bearer " + accessToken);
                 response.sendRedirect(redirectionUri);
-
             }
         } else {
             // OAuth2User가 아닌 경우
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
-    }
-
-    private void addEmailToCookie(String email, HttpServletResponse response) {
-        final String COOKIE_NAME = "email";
-        Cookie cookie = new Cookie(COOKIE_NAME, email);
-        cookie.setMaxAge(3600);
-        cookie.setPath("/");
-        response.addCookie(cookie);
     }
 }
