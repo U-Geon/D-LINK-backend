@@ -34,7 +34,6 @@ public class S3FileService {
     // 버킷의 해당 폴더에 파일 저장.
     public String createPostImageFile(String dir, MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
-        String fileUrl = "https://" + bucket + "/" + dir + "/" + fileName;
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());
@@ -42,6 +41,6 @@ public class S3FileService {
 
         amazonS3.putObject(bucket, dir + "/" + fileName, file.getInputStream(), metadata);
 
-        return fileUrl;
+        return amazonS3.getUrl(bucket, dir + "/" + fileName).toString();
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * s3 파일 업로드 예시
@@ -38,6 +39,7 @@ public class FileUploadController {
 
             PutObjectRequest request = new PutObjectRequest(bucket, "post_image/" + fileName, file.getInputStream(), metadata);
             amazonS3.putObject(request);
+            String url = amazonS3.getUrl(bucket, "post_image/" + fileName).toString();
 
             return ResponseEntity.ok(fileUrl);
         } catch (IOException e) {
