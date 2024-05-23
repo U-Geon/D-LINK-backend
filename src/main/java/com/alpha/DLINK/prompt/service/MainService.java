@@ -1,11 +1,10 @@
 package com.alpha.DLINK.prompt.service;
 
 
+import com.alpha.DLINK.domain.beverage.domain.Beverage;
+import com.alpha.DLINK.domain.beverage.repository.BeverageRepository;
 import com.alpha.DLINK.domain.cafe.repository.CafeRepository;
-import com.alpha.DLINK.prompt.dto.ModelServerToWebServerDTO;
-import com.alpha.DLINK.prompt.dto.PromptRequestDTO;
-import com.alpha.DLINK.prompt.dto.PromptResponseDTO;
-import com.alpha.DLINK.prompt.dto.QueryResponseDTO;
+import com.alpha.DLINK.prompt.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +14,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,12 +28,24 @@ public class MainService {
 
     private final WebClient.Builder webClientBuilder;
     private final CafeRepository cafeRepository;
+    private final BeverageRepository beverageRepository;
 
+    // 모델 서버 -> 음료 id와 유사도 받아오기
     @Transactional(readOnly = true)
-    public Mono<List<ModelServerToWebServerDTO>> sendToModelServer(PromptRequestDTO request) {
+    public Mono<List<ModelServerToWebServerDTO>> sendToModelServerAndGetSimilarity(PromptResponseDTO promptResponseDTO) {
+        WebClient webClient = webClientBuilder.baseUrl(baseUrl).build();
 
-        PromptResponseDTO promptResponseDTO = findBeverageIdAndDocument(request);
+        return webClient.post()
+                .uri("/prediction")
+                .bodyValue(promptResponseDTO)
+                .retrieve()
+                .bodyToFlux(ModelServerToWebServerDTO.class)
+                .collectList();
+    }
 
+    // 모델 서버 -> 음료 id와 유사도 받아온 것을 client에게 음료와 유사도 전송.
+    @Transactional(readOnly = true)
+    public Mono<List<WebServerToClientDTO>> sendToModelServerAndSendToClient(PromptResponseDTO promptResponseDTO) {
         WebClient webClient = webClientBuilder.baseUrl(baseUrl).build();
 
         Mono<List<ModelServerToWebServerDTO>> listMono = webClient.post()
@@ -42,8 +55,17 @@ public class MainService {
                 .bodyToFlux(ModelServerToWebServerDTO.class)
                 .collectList();
 
+        return listMono.flatMap(this::findBeveragesWithSimilarity);
+    }
 
-        return listMono;
+    private Mono<List<WebServerToClientDTO>> findBeveragesWithSimilarity(List<ModelServerToWebServerDTO> dtos) {
+        List<WebServerToClientDTO> beverageSimilarityList = dtos.stream()
+                .map(dto -> {
+                    Beverage beverage = beverageRepository.findById(dto.getId()).orElse(null);
+                    return new WebServerToClientDTO(dto.getSimilarity(), Objects.requireNonNull(beverage));
+                }).collect(Collectors.toList());
+
+        return Mono.just(beverageSimilarityList);
     }
 
     // 클라이언트에서 받은 request를 통해 query 호출 후 음료 id와 매핑되는 document 리스트 호출.
