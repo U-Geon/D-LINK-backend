@@ -9,6 +9,7 @@ import lombok.*;
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Table(name = "beverage")
 public class Beverage {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
