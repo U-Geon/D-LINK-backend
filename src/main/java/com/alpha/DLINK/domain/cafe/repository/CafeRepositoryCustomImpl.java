@@ -15,9 +15,9 @@ public class CafeRepositoryCustomImpl implements CafeRepositoryCustom {
 
     @Override
     public List<Object[]> findBeverageIdAndDocumentByConditions(String conditions) {
-        String sql = "SELECT b.beverage_id, d.content FROM Cafe c " +
-                     "JOIN Beverage b ON c.cafe_id = b.cafe_id " +
-                     "JOIN Document d ON b.document_id = d.document_id " +
+        String sql = "SELECT b.beverage_id, d.content FROM cafe c " +
+                     "JOIN beverage b ON c.cafe_id = b.cafe_id " +
+                     "JOIN document d ON b.document_id = d.document_id " +
                      "WHERE " + conditions;
 
         Query query = entityManager.createNativeQuery(sql);

@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MainService {
 
-    @Value("${model.baseUrl}")
+    @Value("${baseUrl.model}")
     private String baseUrl;
 
     private final WebClient.Builder webClientBuilder;
