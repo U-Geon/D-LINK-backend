@@ -40,7 +40,7 @@ public class S3FileService {
         metadata.setContentType(file.getContentType());
         metadata.setContentLength(file.getSize());
 
-        amazonS3.putObject(bucket, fileName, file.getInputStream(), metadata);
+        amazonS3.putObject(bucket, dir + "/" + fileName, file.getInputStream(), metadata);
 
         return fileUrl;
     }
