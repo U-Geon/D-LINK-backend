@@ -2,6 +2,7 @@ package com.alpha.DLINK.domain.post.service;
 
 
 import com.alpha.DLINK.domain.file.domain.File;
+import com.alpha.DLINK.domain.file.repository.FileRepository;
 import com.alpha.DLINK.domain.likeHistory.repository.LikeHistoryRepository;
 import com.alpha.DLINK.domain.post.domain.Post;
 import com.alpha.DLINK.domain.post.dto.FindPostDTO;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class PostService {
     private final PostRepository postRepository;
     private final S3FileService s3FileService;
+    private final FileRepository fileRepository;
 
     // 게시글 생성 로직
     @Transactional
@@ -36,7 +38,8 @@ public class PostService {
             for (MultipartFile file : files) {
                 String fileName = file.getOriginalFilename();
                 String fileUrl = s3FileService.createPostImageFile("post_image", file);
-                File.create(fileUrl, fileName, post);
+                File entity = File.create(fileUrl, fileName, post);
+                fileRepository.save(entity);
             }
 
             postRepository.save(post); // cascade에 의해 자동 영속화 됨.
