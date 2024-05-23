@@ -35,7 +35,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             log.info("member : {} {} ", member.getId(), member.getNickname()); // 수정된 부분
 
             if (member.getNickname() == null) {
-                String redirectionUri = UriComponentsBuilder.fromUriString("http://localhost:3000/login/callback")
+                String redirectionUri = UriComponentsBuilder.fromUriString("https://localhost:3000/login/callback")
                         .queryParam("email", member.getEmail())
                         .build()
                         .toUriString();
@@ -47,7 +47,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 //                jwtService.save(new RefreshToken(refreshToken, member.getId()));
 
                 String accessToken = jwtProvider.generateAccessToken(authentication);
-                String redirectionUri = UriComponentsBuilder.fromUriString("http://localhost:3000/login/callback")
+                String redirectionUri = UriComponentsBuilder.fromUriString("https://localhost:3000/login/callback")
                         .queryParam("token", accessToken)
                         .build()
                         .toUriString();

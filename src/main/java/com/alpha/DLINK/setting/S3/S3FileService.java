@@ -35,11 +35,12 @@ public class S3FileService {
     public String createPostImageFile(String dir, MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
         String fileUrl = "https://" + bucket + "/" + dir + "/" + fileName;
+
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());
         metadata.setContentLength(file.getSize());
 
-        amazonS3.putObject(bucket, dir + "/" + fileName, file.getInputStream(), metadata);
+        amazonS3.putObject(bucket, fileName, file.getInputStream(), metadata);
 
         return fileUrl;
     }
