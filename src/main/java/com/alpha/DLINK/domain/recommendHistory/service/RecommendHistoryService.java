@@ -5,15 +5,20 @@ import com.alpha.DLINK.domain.beverage.repository.BeverageRepository;
 import com.alpha.DLINK.domain.member.domain.Member;
 import com.alpha.DLINK.domain.member.repository.MemberRepository;
 import com.alpha.DLINK.domain.recommendHistory.domain.RecommendHistory;
-import com.alpha.DLINK.domain.recommendHistory.dto.findRecommendHistoryResponseDTO;
+import com.alpha.DLINK.domain.recommendHistory.dto.RecommendHistoryResponseDTO;
 import com.alpha.DLINK.domain.recommendHistory.repository.RecommendHistoryRepository;
+import com.alpha.DLINK.prompt.dto.HomeResponseDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,16 +35,24 @@ public class RecommendHistoryService {
     private final BeverageRepository beverageRepository;
     private final RecommendHistoryRepository recommendHistoryRepository;
 
-    // 해당 사용자의 즐겨찾기 히스토리 모음
+    // 현재 날짜 기준 지난 일주일 간의 히스토리 모음
     @Transactional(readOnly = true)
-    public List<findRecommendHistoryResponseDTO> findBeverageByMember(Long memberId) {
-        return recommendHistoryRepository.findByMemberIdAndIsLikeTrue(memberId).stream().map(findRecommendHistoryResponseDTO::new).collect(Collectors.toList());
+    public List<RecommendHistoryResponseDTO> historyByWeek(Long memberId) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfToday = now.with(LocalTime.MIN); // 오늘 자정
+        LocalDateTime oneWeekAgo = startOfToday.minusWeeks(1); // 일주일 전 자정
+
+        return recommendHistoryRepository.findRecommendHistoriesFromLastWeek(memberId, oneWeekAgo, now)
+                .stream().map(RecommendHistoryResponseDTO::new).toList();
     }
 
-    // 이걸로 할래요 히스토리 모음
+    // 홈 화면 (이걸로 할래요 히스토리 페이징)
     @Transactional(readOnly = true)
-    public List<findRecommendHistoryResponseDTO> findByLikeThis(Long memberId) {
-        return recommendHistoryRepository.findByMemberIdAndIsRecommendedTrue(memberId).stream().map(findRecommendHistoryResponseDTO::new).collect(Collectors.toList());
+    public HomeResponseDTO home(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        Pageable pageable = PageRequest.of(0, 4, Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<RecommendHistory> content = recommendHistoryRepository.findByMemberIdAndIsRecommendedTrue(memberId, pageable).getContent();
+        return new HomeResponseDTO(member.getNickname(), content);
     }
 
     // 이걸로 할래요
@@ -48,21 +61,23 @@ public class RecommendHistoryService {
         Beverage beverage = beverageRepository.findById(beverageId).orElseThrow(IllegalArgumentException::new);
 
         RecommendHistory recommendHistory = RecommendHistory.create(member, beverage);
+        recommendHistory.setSimilarity(similarity);
         recommendHistory.setIsRecommended(true);
         recommendHistoryRepository.save(recommendHistory);
     }
 
     // 즐겨찾기 설정 + 취소 기능 -> 프롬프트 입력 후 추천 받은 음료에 대한 즐겨찾기 또는 이걸로 할래요 했던 음료에 대한 즐겨찾기
-    public void like(Long memberId, Long beverageId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(IllegalArgumentException::new);
-        Beverage beverage = beverageRepository.findById(beverageId).orElseThrow(IllegalArgumentException::new);
-        Optional<RecommendHistory> byMemberAndBeverage = recommendHistoryRepository.findByMemberAndBeverage(member, beverage);
+    public void like(Long memberId, Long beverageId, Long historyId) {
+        Optional<RecommendHistory> byHistoryId = recommendHistoryRepository.findById(historyId);
 
-        if (byMemberAndBeverage.isPresent()) { // 이걸로 할래요 했던 음료
-            RecommendHistory recommendHistory = byMemberAndBeverage.get();
+        if (byHistoryId.isPresent()) { // 이걸로 할래요 했던 음료
+            RecommendHistory recommendHistory = byHistoryId.get();
             Boolean isLike = recommendHistory.getIsLike();
             recommendHistory.setIsLike(!isLike);
-        } else { // 이걸로 할래요 안했던 음료.
+        } else { // 이걸로 할래요 안 한 음료.
+            Member member = memberRepository.findById(memberId).orElseThrow(IllegalArgumentException::new);
+            Beverage beverage = beverageRepository.findById(beverageId).orElseThrow(IllegalArgumentException::new);
+
             RecommendHistory createHistory = RecommendHistory.create(member, beverage);
             createHistory.setIsLike(true);
             recommendHistoryRepository.save(createHistory);

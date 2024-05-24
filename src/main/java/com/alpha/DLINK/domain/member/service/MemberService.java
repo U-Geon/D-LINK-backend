@@ -7,24 +7,27 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;
 
     // 이메일 기준 회원 조회
+    @Transactional(readOnly = true)
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email).orElse(null);
     }
 
-    // 회원 정보 수정
-    @Transactional
+    // 회원 가입 시 업데이트 로직
     public void update(Member member, String name) {
         member.setNickname(name);
+    }
+
+    // 닉네임 수정
+    public void updateNickname(Long memberId, String nickname) {
+        Member findById = memberRepository.findById(memberId).orElseThrow();
+        findById.setNickname(nickname);
     }
 }

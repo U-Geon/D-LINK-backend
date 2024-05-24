@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RecommendRequestDTO {
+public class RecommendHistoryRequestDTO {
     private Long beverageId;
     private String similarity;
 }

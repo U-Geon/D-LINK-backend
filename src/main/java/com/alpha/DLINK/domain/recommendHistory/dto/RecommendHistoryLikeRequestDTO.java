@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class BeverageLikeRequestDTO {
+public class RecommendHistoryLikeRequestDTO {
     private Long beverageId;
+    private Long historyId;
 }

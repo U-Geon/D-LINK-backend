@@ -6,6 +6,7 @@ import com.alpha.DLINK.domain.likeHistory.repository.LikeHistoryRepository;
 import com.alpha.DLINK.domain.member.domain.Member;
 import com.alpha.DLINK.domain.member.repository.MemberRepository;
 import com.alpha.DLINK.domain.post.domain.Post;
+import com.alpha.DLINK.domain.post.dto.PostDetailDTO;
 import com.alpha.DLINK.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,13 +23,8 @@ public class LikeHistoryService {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
 
-    public Optional<LikeHistory> findHistory(Long memberId, Long postId) throws Exception {
-        Member member = memberRepository.findById(memberId).orElseThrow(Exception::new);
-        Post post = postRepository.findById(postId).orElseThrow(Exception::new);
 
-        return likeHistoryRepository.findByMemberAndPost(member, post);
-    }
-
+    // 게시글 좋아요 또는 취소 로직
     public void setLike(Long memberId, Long postId) throws Exception {
         Member member = memberRepository.findById(memberId).orElseThrow(Exception::new);
         Post post = postRepository.findById(postId).orElseThrow(Exception::new);
