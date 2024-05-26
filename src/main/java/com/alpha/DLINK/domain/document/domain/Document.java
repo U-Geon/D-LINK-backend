@@ -10,7 +10,6 @@ import lombok.Setter;
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "document")
 public class Document {
 
     @Id
@@ -18,6 +17,6 @@ public class Document {
     @Column(name = "document_id")
     private Long id;
 
-    @Column(nullable = false, length = 50000)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 }
