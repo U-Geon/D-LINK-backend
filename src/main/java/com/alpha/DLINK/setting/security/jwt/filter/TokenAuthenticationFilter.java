@@ -44,8 +44,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                     verifyAndSaveAuthentication(request, username);
                 }
             } catch (TokenExpiredException e) {
-                jwtProvider.reissueAccessToken(accessToken);
-                verifyAndSaveAuthentication(request, jwtProvider.getUsernameFromAccessToken(accessToken));
+                String s = jwtProvider.reissueAccessToken(accessToken);
+                verifyAndSaveAuthentication(request, s);
             }
         }
 
