@@ -6,13 +6,10 @@ import com.alpha.DLINK.domain.likeHistory.repository.LikeHistoryRepository;
 import com.alpha.DLINK.domain.member.domain.Member;
 import com.alpha.DLINK.domain.member.repository.MemberRepository;
 import com.alpha.DLINK.domain.post.domain.Post;
-import com.alpha.DLINK.domain.post.dto.PostDetailDTO;
 import com.alpha.DLINK.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

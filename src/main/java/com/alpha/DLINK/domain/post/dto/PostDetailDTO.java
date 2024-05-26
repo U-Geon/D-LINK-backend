@@ -1,13 +1,11 @@
 package com.alpha.DLINK.domain.post.dto;
 
 import com.alpha.DLINK.domain.file.domain.File;
-import com.alpha.DLINK.domain.likeHistory.domain.LikeHistory;
 import com.alpha.DLINK.domain.post.domain.Post;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Getter @Setter
