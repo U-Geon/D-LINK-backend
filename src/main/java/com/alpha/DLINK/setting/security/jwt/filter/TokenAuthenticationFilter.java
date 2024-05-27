@@ -34,8 +34,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String accessToken = resolveToken(request);
-        log.info("authentication filter 작동.");
-        log.info("Access token: {}", accessToken);
+        log.info("Authentication filter 작동.");
+        log.info("accessToken: {}", accessToken);
 
         if (accessToken != null) {
             try {
@@ -44,8 +44,16 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                     verifyAndSaveAuthentication(request, username);
                 }
             } catch (TokenExpiredException e) {
-                String s = jwtProvider.reissueAccessToken(accessToken);
-                verifyAndSaveAuthentication(request, s);
+                log.info("Access token expired.");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write(e.getMessage());
+                response.getWriter().flush();
+            } catch (Exception e) {
+                log.error("Authentication error: ", e);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write(e.getMessage());
+                response.getWriter().flush();
+                return;
             }
         }
 
@@ -53,11 +61,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private void verifyAndSaveAuthentication(HttpServletRequest request, String username) {
-
         UserDetails userDetails = loadUserService.loadUserByUsername(username);
         AbstractAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 

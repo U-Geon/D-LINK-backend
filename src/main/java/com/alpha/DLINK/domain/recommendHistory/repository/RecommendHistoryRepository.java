@@ -9,11 +9,15 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface RecommendHistoryRepository extends JpaRepository<RecommendHistory, Long> {
 
     // 생성일 기준 최신 이걸로 할래요 히스토리 4개
     Page<RecommendHistory> findByMemberIdAndIsRecommendedTrue(Long memberId, Pageable pageable);
+
+    @Query("SELECT rh FROM RecommendHistory rh WHERE rh.member.id = :memberId AND rh.beverage.id = :beverageId ORDER BY rh.createdAt DESC")
+    Optional<RecommendHistory> findCurrentByMemberIdAndBeverageId(@Param("memberId") Long memberId, @Param("beverageId") Long beverageId);
 
     // 지난 일주일 간의 히스토리 리스트
     @Query("SELECT rh FROM RecommendHistory rh WHERE rh.member.id = :memberId AND rh.createdAt BETWEEN :oneWeekAgo AND :now ORDER BY rh.createdAt DESC")

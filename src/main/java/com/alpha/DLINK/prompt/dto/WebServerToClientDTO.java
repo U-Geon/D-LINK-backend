@@ -14,7 +14,6 @@ public class WebServerToClientDTO {
     private Long beverageId;
     private String name;
     private Nutrition nutrition;
-    private String photo;
     private Type type;
     private Integer price;
 
@@ -23,7 +22,6 @@ public class WebServerToClientDTO {
         this.beverageId = beverage.getId();
         this.name = beverage.getName();
         this.nutrition = beverage.getNutrition();
-        this.photo = beverage.getPhoto();
         this.type = beverage.getType();
         this.price = beverage.getPrice();
     }

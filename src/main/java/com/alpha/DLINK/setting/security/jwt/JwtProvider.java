@@ -25,7 +25,7 @@ public class JwtProvider {
     private final Algorithm algorithm;
 
     @Value("${jwt.access-token.expiration}")
-    private Long accessTokenValidTime; // 30분
+    private Long accessTokenValidTime; // 24시간
 
     @Value("${jwt.refresh-token.expiration}")
     private Long refreshTokenValidTime; // 2주
@@ -34,26 +34,9 @@ public class JwtProvider {
         this.algorithm = Algorithm.HMAC256(secretKey);
     }
 
-    // 회원 정보 조회
-    public String getEmailFromAccessToken(String token) {
-        DecodedJWT jwt = JWT.require(algorithm).build().verify(token);
-        return jwt.getClaim("email").toString();
-    }
-
-    public String getIdFromAccessToken(String token) {
-        DecodedJWT jwt = JWT.require(algorithm).build().verify(token);
-        return jwt.getClaim("member_id").toString();
-    }
-
     public String getUsernameFromAccessToken(String token) {
-
-        return JWT.require(algorithm)
-                .build()
-                .verify(token)
-                .getClaim("username")
-                .asString();
+        return JWT.require(algorithm).build().verify(token).getClaim("username").asString();
     }
-
 
     // 토큰 유효 및 만료 확인
     public boolean validate(String token) throws TokenExpiredException {
@@ -77,9 +60,7 @@ public class JwtProvider {
 
     // access 토큰 생성
     public String generateAccessToken(Authentication authentication) {
-
         CustomOauth2User principal = (CustomOauth2User) authentication.getPrincipal();
-
         return JWT.create()
                 .withIssuedAt(Instant.now())
                 .withExpiresAt(Instant.now().plus(accessTokenValidTime, ChronoUnit.HOURS))
@@ -87,41 +68,22 @@ public class JwtProvider {
                 .sign(algorithm);
     }
 
-//    public String generateRefreshToken(Authentication authentication) {
-//
-//        User userPrincipal = (User) authentication.getPrincipal();
-//
-//        String token = JWT.create()
-//                .withIssuedAt(Instant.now())
-//                .withExpiresAt(Instant.now().plus(refreshTokenExpirationsHour, ChronoUnit.SECONDS))
-//                .sign(algorithm);
-//
-//        redisTemplate.opsForValue().set(token, userPrincipal.getId(), refreshTokenExpirationsHour, TimeUnit.HOURS);
-//
-//        return token;
-//    }
-
     // 액세스 토큰 재발급
     public String reissueAccessToken(String accessToken) {
         String username = getUsernameFromAccessToken(accessToken);
         return generateAccessTokenByNickname(username);
     }
 
-    // 리프레시 토큰 재발급 (필요한 경우)
-//    public String reissueRefreshToken(String refreshToken) {
-//        if(validate(refreshToken) || !getTokenType(refreshToken).equals("refresh")) {
-//            throw new IllegalArgumentException("Invalid or expired refresh token");
-//        }
-//        String email = getEmailFromAccessToken(refreshToken);
-//        Long id = Long.parseLong(getIdFromAccessToken(refreshToken));
-//        return generateRefreshToken(email, id);
-//    }
+    // JWT 만료 시간 확인
+    public boolean isTokenExpired(String token) {
+        DecodedJWT jwt = JWT.require(algorithm).build().verify(token);
+        return jwt.getExpiresAt().before(new Date());
+    }
 
+    // 인증 정보 가져오기
     public Authentication getAuthentication(String token) {
         DecodedJWT decodedJWT = JWT.require(algorithm).build().verify(token);
-
         List<SimpleGrantedAuthority> authorities = getAuthorities("user");
-
         User principal = new User(decodedJWT.getClaim("username").asString(), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }

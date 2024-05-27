@@ -27,9 +27,6 @@ public class Beverage {
     @JoinColumn(name = "cafe_id")
     private Cafe cafe;
 
-    @Column(name = "photo")
-    private String photo;
-
     @Enumerated(EnumType.STRING)
     private Type type;
 
@@ -45,9 +42,12 @@ public class Beverage {
         beverage.setCafe(cafe);
         beverage.setNutrition(nutrition);
 
-        if(type.equals("coffee")) beverage.setType(Type.COFFEE);
-        else if(type.equals("ade")) beverage.setType(Type.ADE);
-        else beverage.setType(Type.TEA);
+        switch (type) {
+            case "COFFEE" -> beverage.setType(Type.COFFEE);
+            case "ADE" -> beverage.setType(Type.ADE);
+            case "LATTE" -> beverage.setType(Type.BEVERAGE);
+            default -> beverage.setType(Type.TEA);
+        }
 
         return beverage;
     }

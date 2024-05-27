@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public enum Type {
-    ADE, TEA, COFFEE
+    ADE, TEA, COFFEE, BEVERAGE
 }

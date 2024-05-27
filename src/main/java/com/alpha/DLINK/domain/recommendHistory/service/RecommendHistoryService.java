@@ -28,7 +28,6 @@ public class RecommendHistoryService {
     /**
      * 추천하는 대로 히스토리 때려 박기 => 사용자 별 추천 히스토리 api
      * 이걸로 할래요 기능 (isLike) 추가 => 이걸로 할래요 히스토리 api
-     *
      */
 
     private final MemberRepository memberRepository;
@@ -66,23 +65,27 @@ public class RecommendHistoryService {
         recommendHistoryRepository.save(recommendHistory);
     }
 
-    // 즐겨찾기 설정 + 취소 기능 -> 프롬프트 입력 후 추천 받은 음료에 대한 즐겨찾기 또는 이걸로 할래요 했던 음료에 대한 즐겨찾기
-    public void like(Long memberId, Long beverageId, Long historyId) {
-        Optional<RecommendHistory> byHistoryId = recommendHistoryRepository.findById(historyId);
+    // 추천 받은 음료 중에서 즐겨찾기 설정 + 취소 기능 (과거에 즐겨찾기 했었던 히스토리를 불러올 수 있음)
+    public void likeAtMain(Long memberId, Long beverageId) {
 
-        if (byHistoryId.isPresent()) { // 이걸로 할래요 했던 음료
-            RecommendHistory recommendHistory = byHistoryId.get();
-            Boolean isLike = recommendHistory.getIsLike();
-            recommendHistory.setIsLike(!isLike);
-        } else { // 이걸로 할래요 안 한 음료.
+        Optional<RecommendHistory> recommendHistoryOptional = recommendHistoryRepository.findCurrentByMemberIdAndBeverageId(memberId, beverageId);
+
+        if (recommendHistoryOptional.isEmpty()) {
             Member member = memberRepository.findById(memberId).orElseThrow(IllegalArgumentException::new);
             Beverage beverage = beverageRepository.findById(beverageId).orElseThrow(IllegalArgumentException::new);
 
-            RecommendHistory createHistory = RecommendHistory.create(member, beverage);
-            createHistory.setIsLike(true);
-            recommendHistoryRepository.save(createHistory);
+            RecommendHistory recommendHistory = RecommendHistory.create(member, beverage);
+            recommendHistory.setIsLike(true);
+            recommendHistoryRepository.save(recommendHistory);
+        } else {
+            RecommendHistory recommendHistory = recommendHistoryOptional.get();
+            recommendHistory.setIsLike(!recommendHistory.getIsLike());
         }
     }
 
-
+    // 히스토리 페이지에서 즐겨찾기 설정 + 해제
+    public void likeAtHistoryPage(Long historyId) {
+        RecommendHistory recommendHistory = recommendHistoryRepository.findById(historyId).orElseThrow(IllegalArgumentException::new);
+        recommendHistory.setIsLike(!recommendHistory.getIsLike());
+    }
 }

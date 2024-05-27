@@ -15,12 +15,10 @@ public class Cafe {
 
     @Column(name = "name")
     private String name;
-    private String latitude;
-    private String longitude;
 
-    public Cafe(String name, String latitude, String longitude) {
-        this.name = name;
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
+    @Column(columnDefinition = "TEXT")
+    private String latitude;
+
+    @Column(columnDefinition = "TEXT")
+    private String longitude;
 }

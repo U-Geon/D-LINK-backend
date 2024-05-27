@@ -36,7 +36,6 @@ public class RecommendHistoryResponseDTO {
         private String name;
         private Nutrition nutrition;
         private String cafe;
-        private String photo;
         private Type type;
         private Integer price;
 
@@ -45,7 +44,6 @@ public class RecommendHistoryResponseDTO {
             this.name = beverage.getName();
             this.nutrition = beverage.getNutrition();
             this.cafe = beverage.getCafe().getName();
-            this.photo = beverage.getPhoto();
             this.type = beverage.getType();
             this.price = beverage.getPrice();
         }
