@@ -30,7 +30,7 @@ public class Beverage {
     @Enumerated(EnumType.STRING)
     private Type type;
 
-    @Column(name = "photo", nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String photo;
 
     private Integer price;

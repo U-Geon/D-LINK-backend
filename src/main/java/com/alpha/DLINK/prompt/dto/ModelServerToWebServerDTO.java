@@ -7,4 +7,5 @@ import lombok.Setter;
 public class ModelServerToWebServerDTO {
     private Long id;
     private Double similarity;
+    private String cafe;
 }

@@ -17,8 +17,9 @@ public class WebServerToClientDTO {
     private Type type;
     private Integer price;
     private String photo;
+    private String cafe;
 
-    public WebServerToClientDTO(Double similarity, Beverage beverage) {
+    public WebServerToClientDTO(Double similarity, Beverage beverage, String cafe) {
         this.similarity = similarity;
         this.beverageId = beverage.getId();
         this.name = beverage.getName();
@@ -26,5 +27,6 @@ public class WebServerToClientDTO {
         this.type = beverage.getType();
         this.price = beverage.getPrice();
         this.photo = beverage.getPhoto();
+        this.cafe = cafe;
     }
 }
