@@ -38,6 +38,7 @@ public class RecommendHistoryResponseDTO {
         private String cafe;
         private Type type;
         private Integer price;
+        private String photo;
 
         public BeverageDTO(Beverage beverage) {
             this.id = beverage.getId();
@@ -46,6 +47,7 @@ public class RecommendHistoryResponseDTO {
             this.cafe = beverage.getCafe().getName();
             this.type = beverage.getType();
             this.price = beverage.getPrice();
+            this.photo = beverage.getPhoto();
         }
     }
 }

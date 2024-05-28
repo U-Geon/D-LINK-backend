@@ -30,25 +30,12 @@ public class Beverage {
     @Enumerated(EnumType.STRING)
     private Type type;
 
+    @Column(name = "photo", nullable = false)
+    private String photo;
+
     private Integer price;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "document_id")
     private Document document;
-
-    public static Beverage create(String name, Cafe cafe, Nutrition nutrition, String type) {
-        Beverage beverage = new Beverage();
-        beverage.setName(name);
-        beverage.setCafe(cafe);
-        beverage.setNutrition(nutrition);
-
-        switch (type) {
-            case "COFFEE" -> beverage.setType(Type.COFFEE);
-            case "ADE" -> beverage.setType(Type.ADE);
-            case "LATTE" -> beverage.setType(Type.BEVERAGE);
-            default -> beverage.setType(Type.TEA);
-        }
-
-        return beverage;
-    }
 }
