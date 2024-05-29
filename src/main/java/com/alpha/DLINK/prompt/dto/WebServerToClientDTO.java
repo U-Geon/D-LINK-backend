@@ -1,6 +1,5 @@
 package com.alpha.DLINK.prompt.dto;
 
-import com.alpha.DLINK.domain.beverage.domain.Beverage;
 import com.alpha.DLINK.domain.beverage.domain.Nutrition;
 import com.alpha.DLINK.domain.beverage.domain.Type;
 import lombok.AllArgsConstructor;
@@ -17,16 +16,6 @@ public class WebServerToClientDTO {
     private Type type;
     private Integer price;
     private String photo;
+    private String otherBeverage;
     private String cafe;
-
-    public WebServerToClientDTO(Double similarity, Beverage beverage, String cafe) {
-        this.similarity = similarity;
-        this.beverageId = beverage.getId();
-        this.name = beverage.getName();
-        this.nutrition = beverage.getNutrition();
-        this.type = beverage.getType();
-        this.price = beverage.getPrice();
-        this.photo = beverage.getPhoto();
-        this.cafe = cafe;
-    }
 }
