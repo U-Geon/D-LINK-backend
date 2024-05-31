@@ -50,7 +50,7 @@ public class MainService {
     private Mono<List<WebServerToClientDTO>> findBeveragesWithSimilarity(List<ModelServerToWebServerDTO> dtos) {
         List<WebServerToClientDTO> beverageSimilarityList = dtos.stream()
                 .sorted(Comparator.comparing(ModelServerToWebServerDTO::getSimilarity).reversed()) // similarity 기준 내림차순 정렬
-                .limit(8) // 상위 6개 선택
+                .limit(8) // 상위 8개 선택
                 .map(dto -> {
                     List<Object[]> result = beverageRepository.findBeverageAndRandomOtherBeverage(dto.getId());
                     if (result.isEmpty()) {

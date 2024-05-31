@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -22,6 +23,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtProvider jwtProvider;
 
+    @Value("${baseUrl.client-redirect-url}")
+    private String baseUrl;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
@@ -35,7 +39,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             log.info("member : {} {} ", member.getId(), member.getNickname()); // 수정된 부분
 
             if (member.getNickname() == null) {
-                String redirectionUri = UriComponentsBuilder.fromUriString("https://localhost:3000/login/callback")
+                String redirectionUri = UriComponentsBuilder.fromUriString(baseUrl)
                         .queryParam("email", member.getEmail())
                         .build()
                         .toUriString();
@@ -47,7 +51,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 //                jwtService.save(new RefreshToken(refreshToken, member.getId()));
 
                 String accessToken = jwtProvider.generateAccessToken(authentication);
-                String redirectionUri = UriComponentsBuilder.fromUriString("https://localhost:3000/login/callback")
+                String redirectionUri = UriComponentsBuilder.fromUriString(baseUrl)
                         .queryParam("token", accessToken)
                         .build()
                         .toUriString();
