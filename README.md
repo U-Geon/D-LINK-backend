@@ -1,49 +1,57 @@
-# backend
-2024년도 1학기 알파프로젝트 D:LINK 백엔드
+### **📍 Project 소개**
 
-- 개요 : 대규모 언어 모델을 활용한 사용자 맞춤 음료 추천 플랫폼
+[국민대학교 12학점 알파프로젝트]
 
-# Tools
-- **FrameWork** : Spring Boot
-- **Cloud**
-    - AWS EC2
-    - AWS S3
-    - Docker
-- **CI/CD**
-    - GitHub Actions
-- **DB**
-    - MySQL
-- **버전 관리 / 이슈 관리**
-    - GitHub / github projects
-- **협업 툴**
-    - Notion
+**AI 기반의 사용자 맞춤 카페 음료 추천 플랫폼 - “DLNK”**
 
-# 서비스 소개
-- Onboarding
-<img width="243" alt="image" src="https://github.com/user-attachments/assets/54dd3a11-1a6b-4498-8d27-4cf570b07336" />
-<img width="244" alt="image" src="https://github.com/user-attachments/assets/39cba788-9f99-4472-9884-ea5c6489a978" />
+**배경**
 
-- Landing
-<img width="257" alt="image" src="https://github.com/user-attachments/assets/b11b2824-2214-4180-af37-c7b119900d37" />
+- 카페 음료 소비자들의 메뉴 결정 장애 심리로 인해 카페 음료를 선택하기 어려워하는 경향이 있음.
+- 푸드테크 산업의 발달로 인해 사람들의 카페 음료 소비량이 증가함
+- 설문 조사 결과를 보면 카페 메뉴 선택에 어려움을 겪는 사용자들이 많다는 것을 시사함. 따라서 실제 사용자들의 음료 선택에 도움을 주기 위한 서비스의 필요성을 느끼게 됨.
+<img width="939" alt="image" src="https://github.com/user-attachments/assets/031829be-1265-4b94-a75c-1cb24cbd5420" />
 
-- 추천 Prompt 입력
-<img width="413" alt="image" src="https://github.com/user-attachments/assets/460702c2-1f6e-4bb1-bbdf-3272ed90e5e4" />
 
-- 추천 모델 Output
-<img width="227" alt="image" src="https://github.com/user-attachments/assets/67a6a402-a047-4e32-bfd6-0eeb38e3a0d3" />
 
-- 추천 음료 중 택 1
-<img width="437" alt="image" src="https://github.com/user-attachments/assets/fce73535-b645-4d53-828e-b31c2f897c91" />
+**목적**
 
-- 추천 History
-<img width="251" alt="image" src="https://github.com/user-attachments/assets/b1ed3cff-92a1-4dfe-b61d-d0fa0a96a6d6" />
+- 사용자가 어떤 음료수를 마셔야 할 지 고민하고 결정하지 못할 때 인공지능 추천 시스템을 통해 사용자에게 현재 상황에 맞는 음료수를 추천해준다.
+- 사용자들이 알지 못했던 음료를 새롭게 추천해 주거나 추천받은 새로운 음료를 시도해 보는 것을 즐기도록 도와준다.
+- 다양한 맛있는 음료수와 함께 사용자의 음료 선택을 더욱 다채롭게 만들어 주는 역할을 한다.
 
-- Community
-<img width="490" alt="image" src="https://github.com/user-attachments/assets/e6a3123d-952f-437f-b3ee-3241a898e365" />
-<img width="227" alt="image" src="https://github.com/user-attachments/assets/79aebfe4-482d-4863-b627-b90bceda2d6e" />
+**기능**
 
-- MyPage
-<img width="275" alt="image" src="https://github.com/user-attachments/assets/d4bc8001-398b-464f-a770-9fb824799247" />
+- 카페 음료 및 디저트 꿀조합 등 정보 교류의 장으로써의 커뮤니티 기능 제공
+- 사용자가 입력한 프롬프트 내용을 바탕으로 카카오맵 API를 활용한 내 주변 카페 음료 추천
+- 추천 받은 음료 및 선택한 추천 음료 히스토리 기록 제공
+
+### 📍 Information
+
+- **개발 기간** : 2024.01 ~ 2024.05 (5개월)
+- **플랫폼** : Web
+- **개발 인원** : 6명
+- **담당 역할**
+    - 카카오 소셜 로그인 및 회원 관리 API (기여도 100%)
+    - Spring WebFlux를 활용한 모델 서버 API 호출 및 데이터 후처리 로직 구현 (기여도 100%)
+    - 도메인 별 CRUD API 구현 (기여도 100%)
+    - Web Server Infra 구축 (기여도 100%)
+    - Nginx를 활용한 HTTPS 적용 (기여도 100%)
+- **개발 환경**
+    - **Language** : Java 17 (OpenJDK 17)
+    - **Web Server** : Apache Tomcat, AWS EC2, ubuntu
+    - **Framework** : Spring Boot 3.x, Spring Security 6.x, Spring WebFlux
+    - **DB** : MySQL 17, Redis
+    - **CI/CD** : Docker, GitHub Actions
+    - **인증, 인가** : JWT, OAuth2
+    - **IDE** : Intellij IDEA
+    - **Tools**
+        - **Collaboration** : Notion
+        - **Version Control** : Git
+        - **API Docs.** : Swagger-UI
+- **Architecture**
+<img width="1184" alt="image" src="https://github.com/user-attachments/assets/331b7483-0617-470e-8ede-a375335d5409" />
+
+
 
 
 ## 모델 서버 API 연동 (음료 추천 기능) 
