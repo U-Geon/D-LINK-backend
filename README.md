@@ -38,7 +38,7 @@
     - **Language** : Java 17 (OpenJDK 17)
     - **Web Server** : Apache Tomcat, AWS EC2, ubuntu
     - **Framework** : Spring Boot 3.x, Spring Security 6.x, Spring WebFlux
-    - **DB** : MySQL 17, Redis
+    - **DB** : MySQL 17
     - **CI/CD** : Docker, GitHub Actions
     - **인증, 인가** : JWT, OAuth2
     - **IDE** : Intellij IDEA
